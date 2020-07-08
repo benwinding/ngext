@@ -1,0 +1,27 @@
+{
+  "name": "nguxt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Ben Winding <hello@benwinding.com>",
+  "license": "GPL-3",
+  "dependencies": {
+    "@angular-devkit/build-angular": "0.901.10",
+    "@angular/animations": "^9",
+    "@angular/cli": "^9",
+    "@angular/common": "9",
+    "@angular/compiler": "9",
+    "@angular/compiler-cli": "9",
+    "@angular/core": "^9",
+    "@angular/platform-browser": "9",
+    "@angular/platform-browser-dynamic": "^9",
+    "@angular/router": "9",
+    "@babel/polyfill": "^7.10.4",
+    "typescript": "3.8.x",
+    "zone.js": "^0.10.3"
+  },
+  "devDependencies": {
+    "commander": "^5.1.0",
+    "ngx-build-plus": "^9",
+    "shelljs": "^0.8.4"
+  }
+}
