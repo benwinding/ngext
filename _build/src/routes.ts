@@ -1,14 +1,16 @@
 import { Routes } from '@angular/router';
-import { TestComponent } from '@pages/test.component';
-import { AnotherComponent } from '@pages/another.component';
 
 export const routes: Routes = [
   {
     path: 'test',
-    component: TestComponent,
+    loadChildren: () => import('./../../pages/test').then(m => m.default),
   },
+  // {
+  //   path: 'another',
+  //   loadChildren: () => import('./page-modules').then(m => m.M1),
+  // },
   {
-    path: 'another',
-    component: AnotherComponent,
-  },
+    path: '**',
+    redirectTo: 'test'
+  }
 ];
