@@ -17,5 +17,8 @@
       "@pages/*": ["./pages/*"]
     }
   },
-  "include": ["src", "../pages"]
+  "include": ["src", "../pages"],
+  "angularCompilerOptions": {
+    "enableIvy": true
+  }
 }
