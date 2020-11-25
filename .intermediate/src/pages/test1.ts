@@ -10,7 +10,7 @@ import { RouterModule } from "@angular/router";
     <h1>TEST 3</h1>
   </div>`,
 })
-class TestPageComponent {}
+class PageComponent {}
 
 @NgModule({
   imports: [
@@ -18,10 +18,10 @@ class TestPageComponent {}
     RouterModule.forRoot([
       {
         path: "**",
-        component: TestPageComponent,
+        component: PageComponent,
       },
     ]),
   ],
-  declarations: [TestPageComponent],
+  declarations: [PageComponent],
 })
-export class TestPageModule {}
+export default class PageModule {}

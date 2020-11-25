@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "projects": {
-    "nguxt": {
+    "ngext": {
       "root": ".",
       "sourceRoot": "src",
       "projectType": "application",
@@ -33,6 +33,27 @@
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": true
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "aot": true,
+              "namedChunks": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "ngext:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ngext:build:production"
             }
           }
         }

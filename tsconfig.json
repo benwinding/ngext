@@ -15,7 +15,6 @@
     "paths": {
       "@components": ["./components"],
       "@components/*": ["./components/*"],
-      "@pages/*": ["./pages/*"],
       "@ngext/*": ["./ngext-core/*"],
       "@ngext": ["./ngext-core"]
     }
