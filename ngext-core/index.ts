@@ -1,19 +1,24 @@
-import { Component, NgModule } from '@angular/core';
+import { Component as NgComponent, NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
 
-export function PageModule(input: {
-  template?: string,
-  imports?: any[],
-}) {
+export function Component(input: { template: string; imports: any[] }) {
   return function (constructorFunction: Function) {
-    @Component({
-      template: 'input.template'
-    })
-    class Compss {}
+    const { template, imports } = input;
 
-    return class extends NgModule {
-      imports = input.imports;
-      declarations = [Compss];
-      exports = [Compss];
-    }
-  }
+    @NgComponent({
+      template: template,
+    })
+    class PageComponent {}
+
+    @NgModule({
+      imports: [
+        ...imports,
+        RouterModule.forChild([{ path: "**", component: PageComponent }]),
+      ],
+      declarations: [PageComponent],
+    })
+    class RoutingModule {}
+
+    return RoutingModule;
+  };
 }

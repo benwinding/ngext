@@ -5,23 +5,25 @@
   "author": "Ben Winding <hello@benwinding.com>",
   "license": "GPL-3",
   "dependencies": {
-    "@angular-devkit/build-angular": "0.901.10",
-    "@angular/animations": "^9",
-    "@angular/cli": "^9",
-    "@angular/common": "9",
-    "@angular/compiler": "9",
-    "@angular/compiler-cli": "9",
-    "@angular/core": "^9",
-    "@angular/platform-browser": "9",
-    "@angular/platform-browser-dynamic": "^9",
-    "@angular/router": "9",
+    "@angular-devkit/build-angular": "0.1000.x",
+    "@angular/animations": "^10",
+    "@angular/cli": "^10",
+    "@angular/common": "10",
+    "@angular/compiler": "10",
+    "@angular/compiler-cli": "10",
+    "@angular/core": "^10",
+    "@angular/platform-browser": "10",
+    "@angular/platform-browser-dynamic": "^10",
+    "@angular/router": "10",
     "@babel/polyfill": "^7.10.4",
-    "typescript": "3.8.x",
+    "@ngtools/webpack": "^10",
+    "@types/typescript": "^2.0.0",
+    "typescript": "4.0.x",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
     "commander": "^5.1.0",
-    "ngx-build-plus": "^9",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "ts-node": "^9.0.0"
   }
 }

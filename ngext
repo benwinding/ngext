@@ -7,10 +7,13 @@ const path = require("path");
 commander
   .command("build")
   .description("Tests the update version feature")
-  .action(async () => {
+  .option('--project <project_name>')
+  .action(async (options) => {
     const ng = path.join(__dirname, "node_modules", ".bin", "ng");
-    const cwd = path.join(__dirname, "_build");
-    shell.exec(`${ng} build --project nguxt`, { cwd });
+    const projectName =  options.project || ".intermediate";
+    console.log('using project: ' + projectName);
+    const cwd = path.join(__dirname, projectName);
+    shell.exec(`${ng} build`, { cwd });
   });
 
 commander
@@ -18,7 +21,7 @@ commander
   .description("Tests the update version feature")
   .action(async () => {
     const ng = path.join(__dirname, "node_modules", ".bin", "ng");
-    const cwd = path.join(__dirname, "_build");
+    const cwd = path.join(__dirname, "_app_test");
     shell.exec(`${ng} serve --project nguxt --configuration=dev`, { cwd });
   });
 

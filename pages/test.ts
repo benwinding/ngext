@@ -1,19 +1,12 @@
-import { ComponentsModule } from './../components/index';
-import { CommonModule } from '@angular/common';
-import { OnInit } from "@angular/core";
-import { PageModule } from '../ngext-core/index';
+import { ComponentsModule } from "./../components/index";
+import { CommonModule } from "@angular/common";
+import { Component } from "../ngext-core";
 
-@PageModule({
-  imports: [
-    CommonModule,
-    ComponentsModule
-  ],
+@Component({
+  imports: [CommonModule, ComponentsModule],
   template: `
     <h1>TEST 2</h1>
     <my-component></my-component>
   `,
 })
-export default class TestPage {
-
-}
-
+export default class Page {}
