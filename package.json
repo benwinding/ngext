@@ -18,12 +18,23 @@
     "@babel/polyfill": "^7.10.4",
     "@ngtools/webpack": "^10",
     "@types/typescript": "^2.0.0",
+    "circular-json": "^0.5.9",
+    "deep-object-diff": "^1.1.0",
     "typescript": "4.0.x",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.4",
+    "@types/jest": "^26.0.15",
     "commander": "^5.1.0",
+    "fs-extra": "^9.0.1",
+    "jest": "^26.6.3",
     "shelljs": "^0.8.4",
+    "ts-jest": "^26.4.4",
+    "ts-morph": "^9.0.0",
     "ts-node": "^9.0.0"
+  },
+  "scripts": {
+    "watch": "tsc ./ngext-core/translator.ts --sourceMap --watch"
   }
 }

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 const commander = require("commander");
-const shell = require("shelljs");
 const path = require("path");
 const exec = require("child_process").exec;
+const {copyAndTranslatePages} = require("./ngext-core/translator");
 
 const execCmd = (cmd, directory) => {
   console.log(`running $ "${cmd}" in dir: [${directory}]`);
@@ -26,7 +26,8 @@ commander
   .action(async () => {
     const ng = path.join(__dirname, "node_modules", ".bin", "ng");
     const cwd = path.join(__dirname, ".intermediate");
-    execCmd(`${ng} build`, cwd);
+    // execCmd(`${ng} build`, cwd);
+    copyAndTranslatePages();
   });
 
 commander

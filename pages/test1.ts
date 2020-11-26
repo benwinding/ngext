@@ -1,6 +1,6 @@
-import { ComponentsModule } from "./../components/index";
+import { ComponentsModule } from "@components";
 import { CommonModule } from "@angular/common";
-import { Component } from "../ngext-core";
+import { Component } from "@ngext";
 
 @Component({
   imports: [CommonModule, ComponentsModule],
