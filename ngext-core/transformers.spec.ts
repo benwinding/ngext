@@ -29,28 +29,28 @@ function makeTestTsFile(tsContent: string): [SourceFile, Project] {
 
 describe("transformers tests", () => {
   test("get page module by decorator", () => {
-    const [tsSourceFile] = makeTestTsFile(`@PageModule()
+    const [tsSourceFile] = makeTestTsFile(`@Component()
 export class TestPageBreaksModule {}`);
-    const compClass = t.getPageModule(tsSourceFile);
+    const compClass = t.getComponent(tsSourceFile);
     expect(compClass).toBeTruthy();
   });
 
   test("get decorator property value", () => {
-    const [tsSourceFile] = makeTestTsFile(`@PageModule({
+    const [tsSourceFile] = makeTestTsFile(`@Component({
       template: \`VALUE\`
     })
 export class TestPageBreaksModule {}`);
-    const compClass = t.getPageModule(tsSourceFile);
-    const templateVal = t.getDecoratorPropertyValue(compClass.getDecorator('PageModule'));
+    const compClass = t.getComponent(tsSourceFile);
+    const templateVal = t.getDecoratorPropertyValue(compClass.getDecorator('Component'));
     expect(templateVal).toBe('\`VALUE\`');
   });
 
   test("create @Component PageComp", () => {
-    const [tsSourceFile, project] = makeTestTsFile(`@PageModule({
+    const [tsSourceFile, project] = makeTestTsFile(`@Component({
       template: \`VALUE\`
     })
 export class TestPageBreaksModule {}`);
-    const compClass = t.getPageModule(tsSourceFile);
+    const compClass = t.getComponent(tsSourceFile);
     const pageComponentClass = t.createNgPageComponent(compClass, project);
     const text = pageComponentClass.getText();
     expect(text).toBe(`@Component({
@@ -59,13 +59,13 @@ export class TestPageBreaksModule {}`);
 class PageComp {}`);
   });
   test("create @NgModule PageRoutingModule", () => {
-    const [tsSourceFile, project] = makeTestTsFile(`@PageModule({
+    const [tsSourceFile, project] = makeTestTsFile(`@Component({
       template: \`VALUE\`
     })
 export class TestPageBreaksModule {}`);
-    const compClass = t.getPageModule(tsSourceFile);
-    const pageModuleClass = t.createNgPageModule(compClass, project);
-    const text = pageModuleClass.getText();
+    const compClass = t.getComponent(tsSourceFile);
+    const ComponentClass = t.createNgComponent(compClass, project);
+    const text = ComponentClass.getText();
     expect(text).toBe(`@NgModule({
   imports: imports,
   declarations: declarations,

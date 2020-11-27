@@ -1,12 +1,24 @@
+import { Component, NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
 import { ComponentsModule } from "@components";
 import { CommonModule } from "@angular/common";
-import { Component } from "@ngext";
 
 @Component({
-  imports: [CommonModule, ComponentsModule],
-  template: `
+      template: `
     <h1>TEST 2</h1>
     <my-component></my-component>
-  `,
-})
-export default class Page {}
+  `
+    })
+class PageComp {
+}
+
+let imports = [RouterModule.forChild([{ path: "**", component: PageComp }])];;
+
+let declarations = [PageComp];;
+
+@NgModule({
+      imports: imports,
+      declarations: declarations,
+    })
+export class Page {
+}

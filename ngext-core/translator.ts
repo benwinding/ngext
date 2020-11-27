@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 import { Project, SourceFile } from "ts-morph";
-import { processPageModuleSourceFile } from "./transformers";
+import { processComponentSourceFile } from "./transformers";
 
 const project = new Project();
 
@@ -19,7 +19,7 @@ export async function copyAndTranslatePages() {
 async function saveFile(file: SourceFile) {
   const filePath = file.getFilePath();
   const filePathNew = convertToTargetPath(filePath);
-  const dirPath = path.dirname(filePathNew);
+  const dirPath = path.dirname(filePathNew);4
   const fileText = file.getText();
   await fs.mkdirp(dirPath);
   await fs.writeFile(filePathNew, fileText);
@@ -39,6 +39,6 @@ function convertToTargetPath(inputFilePath: string): string {
 
 function translateMatch(sourceFile: SourceFile): SourceFile {
   console.log("translating: " + sourceFile.getFilePath());
-  const sourceFileConverted = processPageModuleSourceFile(sourceFile);
+  const sourceFileConverted = processComponentSourceFile(sourceFile);
   return sourceFileConverted;
 }

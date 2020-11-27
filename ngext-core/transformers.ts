@@ -9,17 +9,17 @@ import {
 } from "ts-morph";
 const CJSON = require('circular-json');
 
-export function processPageModuleSourceFile(tsSourceFile: SourceFile): SourceFile {
-  const foundPageModule = tsSourceFile
+export function processComponentSourceFile(tsSourceFile: SourceFile): SourceFile {
+  const foundComponent = tsSourceFile
     .getClasses()
-    .find((a) => !!a.getDecorator("PageModule"));
-  if (!foundPageModule) {
+    .find((a) => !!a.getDecorator("Component"));
+  if (!foundComponent) {
     return tsSourceFile;
   }
-  const pmDecorator = foundPageModule.getDecorator("PageModule");
+  const pmDecorator = foundComponent.getDecorator("Component");
   const templateVal = getDecoratorPropertyValue(pmDecorator);
-  const pageName = foundPageModule.getName();
-  foundPageModule.remove();
+  const pageName = foundComponent.getName();
+  foundComponent.remove();
   tsSourceFile.addClass({
     name: "PageComp",
     decorators: [
@@ -82,7 +82,7 @@ export function processPageModuleSourceFile(tsSourceFile: SourceFile): SourceFil
   return tsSourceFile;
 }
 
-export function processPageModule(contentOriginal: string): string {
+export function processComponent(contentOriginal: string): string {
   // initialize
   const project = new Project({ useInMemoryFileSystem: true });
 
@@ -91,7 +91,7 @@ export function processPageModule(contentOriginal: string): string {
     tsFileNameFake,
     contentOriginal
   );
-  const tsSourceFileConverted = processPageModuleSourceFile(tsSourceFile);
+  const tsSourceFileConverted = processComponentSourceFile(tsSourceFile);
   const text =  tsSourceFileConverted.getText();
   return text;
 }
@@ -115,7 +115,7 @@ export function reportNodes(source: ts.SourceFile, newSource: ts.SourceFile) {
  
 }
 
-export function processPageModuleTsFile(source: ts.SourceFile): ts.SourceFile {
+export function processComponentTsFile(source: ts.SourceFile): ts.SourceFile {
   console.log('---- > processing: ' + source.fileName);
   // initialize
   const project = new Project({ useInMemoryFileSystem: true });
@@ -123,18 +123,18 @@ export function processPageModuleTsFile(source: ts.SourceFile): ts.SourceFile {
     source.fileName,
     source.getText()
   );
-  const foundPageModule = tsSourceFile
+  const foundComponent = tsSourceFile
     .getClasses()
-    .find((a) => !!a.getDecorator("PageModule"));
-  if (!foundPageModule) {
+    .find((a) => !!a.getDecorator("Component"));
+  if (!foundComponent) {
     return source;
   }
   // reportNodes(source, tsSourceFile.compilerNode);
 
-  const pmDecorator = foundPageModule?.getDecorator("PageModule");
+  const pmDecorator = foundComponent?.getDecorator("Component");
   const templateVal = getDecoratorPropertyValue(pmDecorator);
-  const pageName = foundPageModule?.getName();
-  foundPageModule?.remove();
+  const pageName = foundComponent?.getName();
+  foundComponent?.remove();
   tsSourceFile.addClass({
     name: "PageComp",
     decorators: [
@@ -194,10 +194,10 @@ export function processPageModuleTsFile(source: ts.SourceFile): ts.SourceFile {
     },
   ]);
   const returnSource = tsSourceFile.compilerNode;
-  return source;
+  return returnSource;
 }
 
-export function processPageModuleTsFileOld(source: ts.SourceFile): ts.SourceFile {
+export function processComponentTsFileOld(source: ts.SourceFile): ts.SourceFile {
   console.log('---- > processing: ' + source.fileName);
   // initialize
   const project = new Project({ useInMemoryFileSystem: true });
@@ -205,18 +205,18 @@ export function processPageModuleTsFileOld(source: ts.SourceFile): ts.SourceFile
     source.fileName,
     source.getText()
   );
-  const foundPageModule = tsSourceFile
+  const foundComponent = tsSourceFile
     .getClasses()
-    .find((a) => !!a.getDecorator("PageModule"));
-  if (!foundPageModule) {
+    .find((a) => !!a.getDecorator("Component"));
+  if (!foundComponent) {
     return source;
   }
   // reportNodes(source, tsSourceFile.compilerNode);
 
-  const pmDecorator = foundPageModule?.getDecorator("PageModule");
+  const pmDecorator = foundComponent?.getDecorator("Component");
   const templateVal = getDecoratorPropertyValue(pmDecorator);
-  const pageName = foundPageModule?.getName();
-  foundPageModule?.remove();
+  const pageName = foundComponent?.getName();
+  foundComponent?.remove();
   tsSourceFile.addClass({
     name: "PageComp",
     decorators: [
@@ -278,19 +278,19 @@ export function processPageModuleTsFileOld(source: ts.SourceFile): ts.SourceFile
   return tsSourceFile.compilerNode;
 }
 
-export function getPageModule(
+export function getComponent(
   tsSourceFile: SourceFile
 ): ClassDeclaration | undefined {
-  const foundPageModule = tsSourceFile
+  const foundComponent = tsSourceFile
     .getClasses()
-    .find((a) => !!a.getDecorator("PageModule"));
-  return foundPageModule;
+    .find((a) => !!a.getDecorator("Component"));
+  return foundComponent;
 }
 
 export function getDecoratorPropertyValue(
-  pageModuleDecorator: Decorator | undefined
+  ComponentDecorator: Decorator | undefined
 ): string | undefined {
-  const args = pageModuleDecorator?.getArguments();
+  const args = ComponentDecorator?.getArguments();
   if (!args || !args.length) {
     return "";
   }
@@ -303,14 +303,14 @@ export function getDecoratorPropertyValue(
 }
 
 export function createNgPageComponent(
-  pageModuleNode: ClassDeclaration,
+  ComponentNode: ClassDeclaration,
   p: Project
 ): ClassDeclaration | undefined {
   /* 
 @Component({ template: "`<h1> Component Breaks! </h1>`" })
 class PageComp { }
   */
-  const pmDecorator = pageModuleNode.getDecorator("PageModule");
+  const pmDecorator = ComponentNode.getDecorator("Component");
   const templateVal = getDecoratorPropertyValue(pmDecorator);
   const newVal = p.createSourceFile(
     "pcom.ts",
@@ -323,8 +323,8 @@ class PageComp {}`
   return classDec;
 }
 
-export function createNgPageModule(
-  pageModuleNode: ClassDeclaration,
+export function createNgComponent(
+  ComponentNode: ClassDeclaration,
   p: Project
 ) {
   /* 
@@ -336,7 +336,7 @@ const declarations = [Comp];
 })
 export class XXXXXXXXXX {}
 */
-  const className = pageModuleNode.getSymbol()?.getName();
+  const className = ComponentNode.getSymbol()?.getName();
   const newVal = p.createSourceFile(
     "pcommodule.ts",
     `const imports = [RouterModule.forChild([{ path: "**", component: PageComp }])];
