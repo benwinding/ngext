@@ -6,7 +6,7 @@ export const routes: Routes = [
     loadChildren: () => import("./pages/test1").then((m) => m.Page),
   },
   {
-    path: "test2",
+    path: "nested/test2",
     loadChildren: () => import("./pages/nested/test2").then((m) => m.Page),
   },
   {

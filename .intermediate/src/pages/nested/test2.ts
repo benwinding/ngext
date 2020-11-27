@@ -12,7 +12,10 @@ import { CommonModule } from "@angular/common";
 class PageComp {
 }
 
-let imports = [RouterModule.forChild([{ path: "**", component: PageComp }])];;
+let imports = [
+                ...[CommonModule, ComponentsModule],
+                RouterModule.forChild([{ path: "**", component: PageComp }])
+              ];;
 
 let declarations = [PageComp];;
 

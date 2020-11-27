@@ -8,8 +8,8 @@ const project = new Project();
 export async function copyAndTranslatePages() {
   const pagesDir = path.join(__dirname, "../pages/**/*.ts");
   const files = project.addSourceFilesAtPaths(pagesDir);
-  const filesConverted = files.map(translateMatch);
   try {
+    const filesConverted = files.map(translateMatch);
     await Promise.all(filesConverted.map(saveFile));
   } catch (error) {
     console.error(error);  
