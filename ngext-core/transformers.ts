@@ -1,13 +1,5 @@
-import {
-  ClassDeclaration,
-  Project,
-  SourceFile,
-  ObjectLiteralExpression,
-  Decorator,
-  ImportDeclaration,
-  ts,
-} from "ts-morph";
-const CJSON = require("circular-json");
+import { SourceFile, ObjectLiteralExpression, Decorator, ts } from "ts-morph";
+import * as path from "path";
 
 export function getDecoratorPropertyValue(
   ComponentDecorator: Decorator | undefined,
@@ -34,12 +26,12 @@ export function processComponentSourceFile(
   if (!foundComponent) {
     return tsSourceFile;
   }
-  const dec = tsSourceFile.getImportDeclaration('@ngext');
+  const dec = tsSourceFile.getImportDeclaration("@ngext");
   dec.remove();
 
   const pmDecorator = foundComponent.getDecorator("Component");
-  const templateVal = getDecoratorPropertyValue(pmDecorator, 'template');
-  const importsVal = getDecoratorPropertyValue(pmDecorator, 'imports');
+  const templateVal = getDecoratorPropertyValue(pmDecorator, "template");
+  const importsVal = getDecoratorPropertyValue(pmDecorator, "imports");
   const pageName = foundComponent.getName();
   foundComponent.remove();
   tsSourceFile.addClass({
@@ -61,11 +53,10 @@ export function processComponentSourceFile(
     declarations: [
       {
         name: "imports",
-        initializer:
-          `[
-            ...${importsVal},
-            RouterModule.forChild([{ path: "**", component: PageComp }])
-          ];`,
+        initializer: `[
+  ...${importsVal},
+  RouterModule.forChild([{ path: "**", component: PageComp }])
+];`,
       },
     ],
   });
@@ -79,6 +70,7 @@ export function processComponentSourceFile(
   });
   tsSourceFile.addClass({
     isExported: true,
+    isDefaultExport: true,
     name: pageName,
     decorators: [
       {
@@ -108,16 +100,69 @@ export function processComponentSourceFile(
   return tsSourceFile;
 }
 
-export function processComponent(contentOriginal: string): string {
-  // initialize
-  const project = new Project({ useInMemoryFileSystem: true });
+/* 
+import { Routes } from "@angular/router";
 
-  const tsFileNameFake = "file.ts";
-  const tsSourceFile = project.createSourceFile(
-    tsFileNameFake,
-    contentOriginal
-  );
-  const tsSourceFileConverted = processComponentSourceFile(tsSourceFile);
-  const text = tsSourceFileConverted.getText();
-  return text;
+export const routes: Routes = [
+  {
+    path: "test1",
+    loadChildren: () => import("./pages/test1").then((m) => m.Page),
+  },
+  {
+    path: "nested/test2",
+    loadChildren: () => import("./pages/nested/test2").then((m) => m.Page),
+  },
+  {
+    path: "**",
+    redirectTo: "test",
+  },
+];
+*/
+
+function createPageRouteItem(routePath: string) {
+  const routePagePath = path.join('pages', routePath);
+  return `
+  {
+    path: "${routePath}",
+    loadChildren: () => import("./${routePagePath}").then((m) => m.default),
+  }`;
+}
+
+function createRouteCatchAllObj(redirectTo: string) {
+  return `
+  {
+    path: "**",
+    redirectTo: "${redirectTo}",
+  }`;
+}
+
+export function createRoutesFile(
+  tsfile: SourceFile,
+  routeModulePathsRelative: string[]
+): SourceFile {
+  // initialize
+  tsfile.insertImportDeclarations(0, [
+    {
+      moduleSpecifier: "@angular/router",
+      namedImports: ["Routes"],
+    },
+  ]);
+  const routesLiteral = [
+    ...routeModulePathsRelative.map(createPageRouteItem), 
+    createRouteCatchAllObj('404')
+  ];
+  const routeArrayLiteral = `[
+  ${routesLiteral.join(',')}
+]`;
+  const statement = tsfile.addVariableStatement({
+    declarations: [
+      {
+        name: "routes",
+        initializer: w => w.write(routeArrayLiteral),
+        type: 'Routes'
+      },
+    ],
+  });
+  statement.setIsExported(true);
+  return tsfile;
 }

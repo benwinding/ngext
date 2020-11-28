@@ -1,19 +1,37 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 import { Project, SourceFile } from "ts-morph";
-import { processComponentSourceFile } from "./transformers";
+import { createRoutesFile, processComponentSourceFile } from "./transformers";
 
 const project = new Project();
 
+const MAIN_ROOT = path.join(__dirname, "..");
+const INTERMEDIATE_SRC = path.join(MAIN_ROOT, ".intermediate", "src");
+
 export async function copyAndTranslatePages() {
-  const pagesDir = path.join(__dirname, "../pages/**/*.ts");
+  const pagesDir = path.join(MAIN_ROOT, "pages/**/*.ts");
   const files = project.addSourceFilesAtPaths(pagesDir);
   try {
     const filesConverted = files.map(translateMatch);
     await Promise.all(filesConverted.map(saveFile));
+    const routeModulePaths = filesConverted.map((f) => f.getFilePath());
+    await saveRoutesFile(routeModulePaths);
   } catch (error) {
-    console.error(error);  
+    console.error(error);
   }
+}
+
+async function saveRoutesFile(routeModulePaths: string[]) {
+  const routeFilePath = path.join(INTERMEDIATE_SRC, "routes.ts");
+  const tsRouteFile = project.createSourceFile(routeFilePath, "", {
+    overwrite: true,
+  });
+  const routePathsRelative = routeModulePaths
+    .map(convertToRelativePath)
+    .map(stripTsExtension);
+  const ftrans = createRoutesFile(tsRouteFile, routePathsRelative);
+  ftrans.formatText();
+  ftrans.save();
 }
 
 async function saveFile(file: SourceFile) {
@@ -26,15 +44,22 @@ async function saveFile(file: SourceFile) {
   await fs.writeFile(filePathNew, fileText);
 }
 
-function convertToTargetPath(inputFilePath: string): string {
+function convertToRelativePath(inputFilePath: string): string {
   const baseDir = path.join(__dirname, "../pages");
   const baseRelativePath = inputFilePath.slice(baseDir.length);
-  const targetPath = path.join(
-    __dirname,
-    "../.intermediate/src/pages",
-    baseRelativePath
-  );
+  return baseRelativePath;
+}
 
+function stripTsExtension(inputFilePath: string): string {
+  if (!inputFilePath.endsWith(".ts")) {
+    return inputFilePath;
+  }
+  return inputFilePath.slice(0, -3);
+}
+
+function convertToTargetPath(inputFilePath: string): string {
+  const baseRelativePath = convertToRelativePath(inputFilePath);
+  const targetPath = path.join(INTERMEDIATE_SRC, "pages", baseRelativePath);
   return targetPath;
 }
 
