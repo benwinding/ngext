@@ -19,7 +19,8 @@ export async function copyAndTranslatePages() {
 async function saveFile(file: SourceFile) {
   const filePath = file.getFilePath();
   const filePathNew = convertToTargetPath(filePath);
-  const dirPath = path.dirname(filePathNew);4
+  const dirPath = path.dirname(filePathNew);
+  file.formatText();
   const fileText = file.getText();
   await fs.mkdirp(dirPath);
   await fs.writeFile(filePathNew, fileText);

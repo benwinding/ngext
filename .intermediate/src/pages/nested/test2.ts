@@ -4,24 +4,24 @@ import { ComponentsModule } from "@components";
 import { CommonModule } from "@angular/common";
 
 @Component({
-      template: `
+    template: `
     <h1>TEST 2</h1>
     <my-component></my-component>
   `
-    })
+})
 class PageComp {
 }
 
 let imports = [
-                ...[CommonModule, ComponentsModule],
-                RouterModule.forChild([{ path: "**", component: PageComp }])
-              ];;
+    ...[CommonModule, ComponentsModule],
+    RouterModule.forChild([{ path: "**", component: PageComp }])
+];;
 
 let declarations = [PageComp];;
 
 @NgModule({
-      imports: imports,
-      declarations: declarations,
-    })
-export class Page {
+    imports: imports,
+    declarations: declarations,
+})
+export default class Page {
 }
