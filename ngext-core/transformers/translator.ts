@@ -2,15 +2,24 @@ import * as path from "path";
 import * as fs from "fs-extra";
 import { Project, SourceFile } from "ts-morph";
 import { createRoutesFile, processComponentSourceFile } from "./transformers";
+import watch from 'glob-watcher';
 
 const project = new Project();
 
-const MAIN_ROOT = path.join(__dirname, "..");
+const MAIN_ROOT = path.join(__dirname, "../..");
 const INTERMEDIATE_SRC = path.join(MAIN_ROOT, ".intermediate", "src");
 
-export async function copyAndTranslatePages() {
-  const pagesDir = path.join(MAIN_ROOT, "pages/**/*.ts");
-  const files = project.addSourceFilesAtPaths(pagesDir);
+export async function watchCopyAndTranslateAllPages() {
+  const pagesDirGlob = path.join(MAIN_ROOT, "pages/**/*.ts");
+  const watcher = watch([pagesDirGlob]);
+  watcher.on('change', (e, filename) => {
+    copyAndTranslateAllPages();
+  });
+}
+
+export async function copyAndTranslateAllPages() {
+  const pagesDirGlob = path.join(MAIN_ROOT, "pages/**/*.ts");
+  const files = project.addSourceFilesAtPaths(pagesDirGlob);
   try {
     const filesConverted = files.map(translateMatch);
     await Promise.all(filesConverted.map(saveFile));
@@ -45,7 +54,7 @@ async function saveFile(file: SourceFile) {
 }
 
 function convertToRelativePath(inputFilePath: string): string {
-  const baseDir = path.join(__dirname, "../pages");
+  const baseDir = path.join(MAIN_ROOT, "../pages");
   const baseRelativePath = inputFilePath.slice(baseDir.length);
   return baseRelativePath;
 }

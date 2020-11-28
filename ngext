@@ -3,16 +3,19 @@
 const commander = require("commander");
 const path = require("path");
 const exec = require("child_process").exec;
-const {copyAndTranslatePages} = require("./ngext-core/translator");
+const {
+  copyAndTranslateAllPages,
+  watchCopyAndTranslateAllPages,
+} = require("./ngext-core");
 
 const execCmd = (cmd, directory) => {
   console.log(`running $ "${cmd}" in dir: [${directory}]`);
   const child = exec(cmd, { cwd: directory });
 
-  child.stdout.on("data", function(data) {
+  child.stdout.on("data", function (data) {
     console.log(data);
   });
-  child.stderr.on("data", function(data) {
+  child.stderr.on("data", function (data) {
     console.error(data);
   });
   return new Promise((resolve, reject) => {
@@ -27,7 +30,7 @@ commander
     const ng = path.join(__dirname, "node_modules", ".bin", "ng");
     const cwd = path.join(__dirname, ".intermediate");
     // execCmd(`${ng} build`, cwd);
-    copyAndTranslatePages();
+    copyAndTranslateAllPages();
   });
 
 commander
@@ -36,6 +39,7 @@ commander
   .action(async () => {
     const ng = path.join(__dirname, "node_modules", ".bin", "ng");
     const cwd = path.join(__dirname, ".intermediate");
+    watchCopyAndTranslateAllPages();
     execCmd(`${ng} serve`, cwd);
   });
 

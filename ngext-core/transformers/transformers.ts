@@ -120,10 +120,11 @@ export const routes: Routes = [
 */
 
 function createPageRouteItem(routePath: string) {
+  const stripPrefixSlash = routePath.startsWith('/') ? routePath.slice(1) : routePath;
   const routePagePath = path.join('pages', routePath);
   return `
   {
-    path: "${routePath}",
+    path: "${stripPrefixSlash}",
     loadChildren: () => import("./${routePagePath}").then((m) => m.default),
   }`;
 }

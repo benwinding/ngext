@@ -1,0 +1,15 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "typeRoots": ["../node_modules/@types"]
+  },
+  "include": ["transformers", "index.ts"],
+  "exclude": ["*/**.spec.ts"]
+}

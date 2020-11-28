@@ -17,9 +17,11 @@
     "@angular/router": "10",
     "@babel/polyfill": "^7.10.4",
     "@ngtools/webpack": "^10",
+    "@types/glob-watcher": "^5.0.0",
     "@types/typescript": "^2.0.0",
     "circular-json": "^0.5.9",
     "deep-object-diff": "^1.1.0",
+    "glob-watcher": "^5.0.5",
     "typescript": "4.0.x",
     "zone.js": "^0.10.3"
   },
@@ -35,6 +37,7 @@
     "ts-node": "^9.0.0"
   },
   "scripts": {
-    "watch": "tsc ./ngext-core/translator.ts --sourceMap --watch"
+    "build": "tsc --project ./ngext-core/tsconfig.json",
+    "watch": "tsc --project ./ngext-core/tsconfig.json --watch"
   }
 }
