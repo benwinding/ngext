@@ -23,24 +23,26 @@ const execCmd = (cmd, directory) => {
   });
 };
 
+const ROOT_DIR = path.join(__dirname);
+const INTERMEDIATE_DIR = path.join(ROOT_DIR, '.ngext');
+const NG_PATH = path.join(ROOT_DIR, "node_modules", ".bin", "ng");
+
 commander
   .command("build")
   .description("Tests the update version feature")
   .action(async () => {
-    const ng = path.join(__dirname, "node_modules", ".bin", "ng");
-    const cwd = path.join(__dirname, ".intermediate");
-    // execCmd(`${ng} build`, cwd);
-    copyAndTranslateAllPages();
+    const cwd = INTERMEDIATE_DIR;
+    await copyAndTranslateAllPages();
+    execCmd(`${NG_PATH} build`, cwd);
   });
 
 commander
   .command("dev")
   .description("Tests the update version feature")
   .action(async () => {
-    const ng = path.join(__dirname, "node_modules", ".bin", "ng");
-    const cwd = path.join(__dirname, ".intermediate");
+    const cwd = INTERMEDIATE_DIR;
     watchCopyAndTranslateAllPages();
-    execCmd(`${ng} serve`, cwd);
+    execCmd(`${NG_PATH} serve`, cwd);
   });
 
 commander.parse(process.argv);

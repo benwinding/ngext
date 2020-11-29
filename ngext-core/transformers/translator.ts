@@ -7,7 +7,7 @@ import watch from 'glob-watcher';
 const project = new Project();
 
 const MAIN_ROOT = path.join(__dirname, "../..");
-const INTERMEDIATE_SRC = path.join(MAIN_ROOT, ".intermediate", "src");
+const INTERMEDIATE_SRC = path.join(MAIN_ROOT, ".ngext", "src");
 
 export async function watchCopyAndTranslateAllPages() {
   const pagesDirGlob = path.join(MAIN_ROOT, "pages/**/*.ts");
@@ -39,6 +39,7 @@ async function saveRoutesFile(routeModulePaths: string[]) {
     .map(convertToRelativePath)
     .map(stripTsExtension);
   const ftrans = createRoutesFile(tsRouteFile, routePathsRelative);
+  console.log('saving route file')
   ftrans.formatText();
   ftrans.save();
 }
