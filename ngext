@@ -41,6 +41,7 @@ commander
   .description("Tests the update version feature")
   .action(async () => {
     const cwd = INTERMEDIATE_DIR;
+    await copyAndTranslateAllPages();
     watchCopyAndTranslateAllPages();
     execCmd(`${NG_PATH} serve`, cwd);
   });

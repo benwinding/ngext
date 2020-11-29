@@ -1,7 +1,9 @@
 import { Component as NgComponent, NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
-export function Component(input: { template: string; imports: any[] }) {
+type AngularModule = any;
+
+export function Component(input: { template: string; imports: AngularModule[] }) {
   return function (constructorFunction: Function) {
     const { template, imports } = input;
 

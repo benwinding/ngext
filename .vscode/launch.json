@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "ngext build",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -20,6 +20,23 @@
         "!**/node_modules/**"
       ],
       "args": ["build"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "ngext dev",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/ngext",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "args": ["dev"]
     }
   ]
 }

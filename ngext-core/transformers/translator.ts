@@ -4,21 +4,23 @@ import { Project, SourceFile } from "ts-morph";
 import { createRoutesFile, processComponentSourceFile } from "./transformers";
 import watch from 'glob-watcher';
 
-const project = new Project();
-
 const MAIN_ROOT = path.join(__dirname, "../..");
 const INTERMEDIATE_SRC = path.join(MAIN_ROOT, ".ngext", "src");
 
 export async function watchCopyAndTranslateAllPages() {
   const pagesDirGlob = path.join(MAIN_ROOT, "pages/**/*.ts");
+  console.log('- watching pages: ', pagesDirGlob);
   const watcher = watch([pagesDirGlob]);
   watcher.on('change', (e, filename) => {
+    console.log('-> file page changed: ', filename);
     copyAndTranslateAllPages();
   });
 }
 
 export async function copyAndTranslateAllPages() {
   const pagesDirGlob = path.join(MAIN_ROOT, "pages/**/*.ts");
+  console.log('- building pages: ', pagesDirGlob);
+  const project = new Project();
   const files = project.addSourceFilesAtPaths(pagesDirGlob);
   try {
     const filesConverted = files.map(translateMatch);
@@ -32,6 +34,7 @@ export async function copyAndTranslateAllPages() {
 
 async function saveRoutesFile(routeModulePaths: string[]) {
   const routeFilePath = path.join(INTERMEDIATE_SRC, "routes.ts");
+  const project = new Project();
   const tsRouteFile = project.createSourceFile(routeFilePath, "", {
     overwrite: true,
   });
@@ -39,7 +42,7 @@ async function saveRoutesFile(routeModulePaths: string[]) {
     .map(convertToRelativePath)
     .map(stripTsExtension);
   const ftrans = createRoutesFile(tsRouteFile, routePathsRelative);
-  console.log('saving route file')
+  console.log('- saving routes file: ', routeFilePath);
   ftrans.formatText();
   ftrans.save();
 }
@@ -74,7 +77,7 @@ function convertToTargetPath(inputFilePath: string): string {
 }
 
 function translateMatch(sourceFile: SourceFile): SourceFile {
-  console.log("translating: " + sourceFile.getFilePath());
+  console.log("--> translating: " + sourceFile.getFilePath());
   const sourceFileConverted = processComponentSourceFile(sourceFile);
   return sourceFileConverted;
 }
