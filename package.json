@@ -1,6 +1,6 @@
 {
   "name": "ngext",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "author": "Ben Winding <hello@benwinding.com>",
   "license": "GPL-3",
