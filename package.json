@@ -10,7 +10,8 @@
   "files": [
     "src",
     "dist",
-    "ngext"
+    "ngext",
+    "templates"
   ],
   "dependencies": {
     "@angular-devkit/build-angular": "0.1000.x",
@@ -47,6 +48,7 @@
   },
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
-    "watch": "tsc --project ./src/tsconfig.json --watch"
+    "watch": "tsc --project ./src/tsconfig.json --watch",
+    "watch-global": "yarn watch --outDir /home/ben/.nvm/versions/node/v10.20.0/lib/node_modules/ngext/dist/"
   }
 }

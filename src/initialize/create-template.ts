@@ -10,7 +10,7 @@ export async function InitNgextDir(ROOT_DIR: string) {
 
 export async function MakeNewProject(TARGET_DIR: string) {
   const vars = { foo: "bar" };
-  const inDir = path.join(__dirname, "..", "..", "templates", ".ngext");
+  const inDir = path.join(__dirname, "..", "..", "templates", "new-project");
   const outDir = path.join(TARGET_DIR);
   await CopyDir(inDir, outDir, vars, true);
 }
