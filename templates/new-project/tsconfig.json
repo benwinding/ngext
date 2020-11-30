@@ -16,9 +16,7 @@
     "lib": ["es2017", "dom"],
     "paths": {
       "@components": ["./components"],
-      "@components/*": ["./components/*"],
-      "@ngext/*": ["./ngext-core/*"],
-      "@ngext": ["./ngext-core"]
+      "@components/*": ["./components/*"]
     }
   },
   "include": ["pages", "components"]  

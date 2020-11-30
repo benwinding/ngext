@@ -1,9 +1,17 @@
 {
   "name": "ngext",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.0.3",
+  "main": "dist/index.js",
   "author": "Ben Winding <hello@benwinding.com>",
   "license": "GPL-3",
+  "bin": {
+    "ngext": "./dist/ngext.js"
+  },
+  "files": [
+    "src",
+    "dist",
+    "ngext"
+  ],
   "dependencies": {
     "@angular-devkit/build-angular": "0.1000.x",
     "@angular/animations": "^10",
@@ -17,27 +25,28 @@
     "@angular/router": "10",
     "@babel/polyfill": "^7.10.4",
     "@ngtools/webpack": "^10",
+    "@types/fs-extra": "^9.0.4",
     "@types/glob-watcher": "^5.0.0",
     "@types/typescript": "^2.0.0",
     "circular-json": "^0.5.9",
+    "commander": "^5.1.0",
+    "copy-template-dir": "^1.4.0",
     "deep-object-diff": "^1.1.0",
+    "fs-extra": "^9.0.1",
     "glob-watcher": "^5.0.5",
+    "shelljs": "^0.8.4",
+    "ts-morph": "^9.1.0",
+    "ts-node": "^9.0.0",
     "typescript": "4.0.x",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.4",
     "@types/jest": "^26.0.15",
-    "commander": "^5.1.0",
-    "fs-extra": "^9.0.1",
     "jest": "^26.6.3",
-    "shelljs": "^0.8.4",
-    "ts-jest": "^26.4.4",
-    "ts-morph": "^9.1.0",
-    "ts-node": "^9.0.0"
+    "ts-jest": "^26.4.4"
   },
   "scripts": {
-    "build": "tsc --project ./ngext-core/tsconfig.json",
-    "watch": "tsc --project ./ngext-core/tsconfig.json --watch"
+    "build": "tsc --project ./src/tsconfig.json",
+    "watch": "tsc --project ./src/tsconfig.json --watch"
   }
 }

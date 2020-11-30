@@ -2,6 +2,11 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": ".",
+    "outDir": "../dist",
+    "lib": ["ES2019", "dom"],
+    "module": "commonjs",
+    "target": "es2018",
+    "types": ["node"],
     "sourceMap": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -10,6 +15,6 @@
     "experimentalDecorators": true,
     "typeRoots": ["../node_modules/@types"]
   },
-  "include": ["transformers", "index.ts"],
+  "include": ["./*.ts"],
   "exclude": ["*/**.spec.ts"]
 }

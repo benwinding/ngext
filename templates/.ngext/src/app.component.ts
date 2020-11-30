@@ -5,11 +5,13 @@ import { routes } from "./app.routing";
   selector: "app-root",
   template: `
     <h2>Report Components Project</h2>
-    <div>
-      <a *ngFor="let linkItem of linkItems" [routerLink]="[linkItem.path]">
-        {{ linkItem.path }}
-      </a>
-    </div>
+    <ul>
+      <li *ngFor="let linkItem of linkItems">
+        <a [routerLink]="[linkItem.path]">
+          {{ linkItem.path }}
+        </a>
+      </li>
+    </ul>
     <div style="height: 80vh; position: relative;">
       <router-outlet></router-outlet>
     </div>
@@ -17,5 +19,5 @@ import { routes } from "./app.routing";
   styles: [],
 })
 export class AppComponent {
-  linkItems = routes;
+  linkItems = routes.slice(0, -1);
 }

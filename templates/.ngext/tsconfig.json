@@ -15,8 +15,8 @@
     "paths": {
       "@components": ["../components"],
       "@components/*": ["../components/*"],
-      "@ngext/*": ["../ngext-core/*"],
-      "@ngext": ["../ngext-core"]
+      "@ngext/*": ["../src/*"],
+      "@ngext": ["../src"]
     }
   },
   "angularCompilerOptions": {

@@ -26,7 +26,7 @@ export function processComponentSourceFile(
   if (!foundComponent) {
     return tsSourceFile;
   }
-  const dec = tsSourceFile.getImportDeclaration("@ngext");
+  const dec = tsSourceFile.getImportDeclaration("ngext");
   dec.remove();
 
   const pmDecorator = foundComponent.getDecorator("Component");
@@ -119,13 +119,11 @@ export const routes: Routes = [
 ];
 */
 
-function createPageRouteItem(routePath: string) {
-  const stripPrefixSlash = routePath.startsWith('/') ? routePath.slice(1) : routePath;
-  const routePagePath = path.join('pages', routePath);
+function createPageRouteItem(route: RouteObjs) {
   return `
   {
-    path: "${stripPrefixSlash}",
-    loadChildren: () => import("./${routePagePath}").then((m) => m.default),
+    path: "${route.route}",
+    loadChildren: () => import("${route.file}").then((m) => m.default),
   }`;
 }
 
@@ -137,9 +135,14 @@ function createRouteCatchAllObj(redirectTo: string) {
   }`;
 }
 
+export type RouteObjs = {
+  route: string;
+  file: string;
+}
+
 export function createRoutesFile(
   tsfile: SourceFile,
-  routeModulePathsRelative: string[]
+  routeModulePathsRelative: RouteObjs[]
 ): SourceFile {
   // initialize
   tsfile.insertImportDeclarations(0, [
