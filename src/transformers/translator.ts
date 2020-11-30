@@ -68,7 +68,22 @@ async function saveFile(ROOT_DIR: string, file: SourceFile) {
   file.formatText();
   const fileText = file.getText();
   await fs.mkdirp(dirPath);
-  await fs.writeFile(filePathNew, fileText);
+  await saveIfUpdated(filePathNew, fileText)
+}
+
+async function saveIfUpdated(filePathNew: string, newText: string) {
+  function write() {
+    return fs.writeFile(filePathNew, newText);
+  }
+  const exists = await fs.pathExists(filePathNew);
+  if (!exists) {
+    return write();
+  }
+  const current = await fs.readFile(filePathNew);
+  const currentText = current.toString();
+  if (newText !== currentText) {
+    return write();
+  }
 }
 
 function translateMatch(sourceFile: SourceFile): SourceFile {
