@@ -7,6 +7,8 @@
   "bin": {
     "ngext": "./dist/ngext.js"
   },
+  "repository": "https://github.com/benwinding/ngext",
+  "homepage": "https://github.com/benwinding/ngext",
   "files": [
     "src",
     "dist",
