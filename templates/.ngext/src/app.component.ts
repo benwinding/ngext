@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Routes } from '@angular/router';
 import { routes } from "./app.routing";
 
 @Component({
@@ -8,7 +9,7 @@ import { routes } from "./app.routing";
     <ul>
       <li *ngFor="let linkItem of linkItems">
         <a [routerLink]="[linkItem.path]">
-          {{ linkItem.path }}
+          {{linkItem.path}}
         </a>
       </li>
     </ul>
@@ -18,6 +19,11 @@ import { routes } from "./app.routing";
   `,
   styles: [],
 })
-export class AppComponent {
-  linkItems = routes.slice(0, -1);
+export class AppComponent implements OnInit {
+  linkItems: Routes;
+
+  ngOnInit() {
+    console.log({routes})
+    this.linkItems = routes.slice(0, -1);
+  }
 }

@@ -21,7 +21,14 @@
             "main": "src/main.ts",
             "aot": true,
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.json"
+            "tsConfig": "tsconfig.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "../static",
+                "output": "/"
+              }
+            ]
           },
           "configurations": {
             "dev": {

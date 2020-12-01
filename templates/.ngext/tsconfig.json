@@ -15,8 +15,10 @@
     "paths": {
       "@components": ["../components"],
       "@components/*": ["../components/*"],
-      "@ngext/*": ["../src/*"],
-      "@ngext": ["../src"]
+      "@guards": ["../guards"],
+      "@guards/*": ["../guards/*"],
+      "@layouts": ["../layouts"],
+      "@layouts/*": ["../layouts/*"]
     }
   },
   "angularCompilerOptions": {

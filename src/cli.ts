@@ -1,6 +1,6 @@
 import commander from "commander";
 import path from "path";
-import fs from "fs";
+import fs from "fs-extra";
 import { exec } from "child_process";
 import {
   copyAndTranslateAllPages,
@@ -38,8 +38,18 @@ commander
     CheckAngularCli();
     await InitNgextDir(ROOT_DIR);
     await copyAndTranslateAllPages(ROOT_DIR);
-    execCmd(`${NG_PATH} build`, INTERMEDIATE_DIR);
+    await execCmd(`${NG_PATH} build`, INTERMEDIATE_DIR);
+    await Copy404File(INTERMEDIATE_DIR);
   });
+
+async function Copy404File(INTERMEDIATE_DIR: string) {
+  const sourceHtmlFile = path.join(INTERMEDIATE_DIR, 'dist', 'index.html');
+  const targetHtmlFile = path.join(INTERMEDIATE_DIR, 'dist', '404.html');
+  console.log('copying fallback file:')
+  console.log('  src=', sourceHtmlFile)
+  console.log(' dest=', targetHtmlFile)
+  return fs.copyFile(sourceHtmlFile, targetHtmlFile);
+}
 
 commander
   .command("dev")

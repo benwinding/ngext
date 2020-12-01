@@ -50,7 +50,7 @@ async function saveRoutesFile(ROOT_DIR: string, routeModulePaths: string[]) {
     const pageFilePath = convertToRelativePath(ROOT_DIR, modulePathNoTs);
     const pageRoute = convertToRelativePath(pagesDir, modulePathNoTs);
     return {
-      route: pageRoute,
+      route: pageRoute.slice(2),
       file: pageFilePath,
     };
   });

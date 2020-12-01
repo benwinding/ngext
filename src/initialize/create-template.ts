@@ -7,7 +7,11 @@ import simpleGit from "/home/ben/projects/ngext/node_modules/simple-git";
 import { convertToRelativePath } from "../utils";
 
 export async function InitNgextDir(ROOT_DIR: string) {
-  const vars = { foo: "bar" };
+  const PROJECT_NAME = path.basename(ROOT_DIR);
+  const vars = { 
+    PROJECT_NAME: PROJECT_NAME, 
+    "linkItem.path": "{{linkItem.path}}" 
+  };
   const inDir = path.join(__dirname, "..", "..", "templates", ".ngext");
   const outDir = path.join(ROOT_DIR, ".ngext");
   await CopyDir(inDir, outDir, vars, false);
