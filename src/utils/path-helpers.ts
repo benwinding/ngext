@@ -1,5 +1,3 @@
-import path from "path";
-
 export function convertToRelativePath(
   ROOT_DIR: string,
   absoluteFilePath: string

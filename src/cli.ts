@@ -53,10 +53,12 @@ commander
   });
 
 commander
-  .command("new")
+  .command("new [ProjectName]")
   .description("Creates a new project")
-  .action(async () => {
-    await MakeNewProject(ROOT_DIR);
+  .action(async (ProjectName) => {
+    const PROJECT_DIR = path.join(process.cwd(), ProjectName || '');
+    console.log('creating new project at: ', PROJECT_DIR)
+    await MakeNewProject(PROJECT_DIR);
   });
 
 function CheckAngularCli() {

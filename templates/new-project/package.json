@@ -1,5 +1,5 @@
 {
-  "name": "ngext-sample",
+  "name": "{{PROJECT_NAME}}",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -8,6 +8,6 @@
   },
   "scripts": {
     "start": "yarn ngext dev",
-    "build": "node ./node_modules/ngext/dist/ngext.js build"
+    "build": "yarn ngext build"
   }
 }

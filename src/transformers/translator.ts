@@ -11,7 +11,7 @@ import {
 import {
   convertToRelativePath,
   stripTsExtension,
-} from "./path-helpers";
+} from "../utils";
 
 export async function watchCopyAndTranslateAllPages(ROOT_DIR: string) {
   const pagesDirGlob = path.join(ROOT_DIR, "pages/**/*.ts");
