@@ -33,4 +33,4 @@ This project uses a 2 stage build system. Stage 1 translates the `@ngext` Compon
 
 ## Thanks
 
-Special thanks to [next.js](https://nextjs.org/) and [nuxt.js](https://nuxtjs.org/), which were both big influences to this project.
+Special thanks to [next.js](https://nextjs.org/) and [nuxt.js](https://nuxtjs.org/), which were both big influences on this project.
