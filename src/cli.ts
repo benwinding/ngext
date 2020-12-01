@@ -7,6 +7,7 @@ import {
   watchCopyAndTranslateAllPages,
 } from "./transformers";
 import { InitNgextDir, MakeNewProject } from "./initialize/create-template";
+const packageJson = require(path.join(__dirname, "../package.json"));
 
 const execCmd = (cmd, directory) => {
   console.log(`running $ "${cmd}" in dir: [${directory}]`);
@@ -42,12 +43,14 @@ commander
     await Copy404File(INTERMEDIATE_DIR);
   });
 
+commander.version(packageJson.version, "-v, --version");
+
 async function Copy404File(INTERMEDIATE_DIR: string) {
-  const sourceHtmlFile = path.join(INTERMEDIATE_DIR, 'dist', 'index.html');
-  const targetHtmlFile = path.join(INTERMEDIATE_DIR, 'dist', '404.html');
-  console.log('copying fallback file:')
-  console.log('  src=', sourceHtmlFile)
-  console.log(' dest=', targetHtmlFile)
+  const sourceHtmlFile = path.join(INTERMEDIATE_DIR, "dist", "index.html");
+  const targetHtmlFile = path.join(INTERMEDIATE_DIR, "dist", "404.html");
+  console.log("copying fallback file:");
+  console.log("  src=", sourceHtmlFile);
+  console.log(" dest=", targetHtmlFile);
   return fs.copyFile(sourceHtmlFile, targetHtmlFile);
 }
 
@@ -66,15 +69,15 @@ commander
   .command("new [ProjectName]")
   .description("Creates a new project")
   .action(async (ProjectName) => {
-    const PROJECT_DIR = path.join(process.cwd(), ProjectName || '');
-    console.log('creating new project at: ', PROJECT_DIR)
+    const PROJECT_DIR = path.join(process.cwd(), ProjectName || "");
+    console.log("creating new project at: ", PROJECT_DIR);
     await MakeNewProject(PROJECT_DIR);
   });
 
 function CheckAngularCli() {
   if (!fs.existsSync(NG_PATH)) {
-    throw 'ng not found: @angular/cli was not found in current project'
-  };
+    throw "ng not found: @angular/cli was not found in current project";
+  }
 }
 
 export { commander };
