@@ -15,12 +15,8 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2017", "dom"],
     "paths": {
-      "@components": ["./components"],
-      "@components/*": ["./components/*"],
-      "@guards": ["./guards"],
-      "@guards/*": ["./guards/*"],
-      "@layouts": ["./layouts"],
-      "@layouts/*": ["./layouts/*"]
+      "~": ["."],
+      "~/*": ["./*"]
     }
   },
   "include": ["pages", "components", "guards", "layouts"]  

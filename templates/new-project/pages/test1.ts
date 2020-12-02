@@ -1,4 +1,4 @@
-import { ComponentsModule } from "@components";
+import { ComponentsModule } from "~/components";
 import { CommonModule } from "@angular/common";
 import { Component } from "ngext";
 

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { MyComponent } from '@components/calendar.component';
+import { MyComponent } from './my.component';
 
 @NgModule({
   declarations: [
