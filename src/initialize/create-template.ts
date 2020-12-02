@@ -2,7 +2,7 @@ import copy from "copy-template-dir";
 import path from "path";
 import fs from "fs-extra";
 
-import simpleGit from "/home/ben/projects/ngext/node_modules/simple-git";
+import simpleGit from "simple-git";
 
 import { convertToRelativePath } from "../utils";
 
