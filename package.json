@@ -52,6 +52,7 @@
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
     "watch": "tsc --project ./src/tsconfig.json --watch",
+    "test": "jest",
     "watch-global": "yarn watch --outDir /home/ben/.nvm/versions/node/v10.20.0/lib/node_modules/ngext/dist/"
   }
 }

@@ -1,5 +1,5 @@
-import { convertToTargetPath, convertToRelativePath, stripTsExtension } from './path-helpers';
-import path from "path";
+import { convertToRelativePath, stripTsExtension } from './path-helpers';
+import * as path from "path";
 
 const CWD = '/random/dir/some/';
 describe("path-helpers", () => {
