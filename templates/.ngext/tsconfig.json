@@ -13,12 +13,8 @@
     "target": "es2015",
     "lib": ["dom"],
     "paths": {
-      "@components": ["../components"],
-      "@components/*": ["../components/*"],
-      "@guards": ["../guards"],
-      "@guards/*": ["../guards/*"],
-      "@layouts": ["../layouts"],
-      "@layouts/*": ["../layouts/*"]
+      "~": ["../"],
+      "~/*": ["../*"]
     }
   },
   "angularCompilerOptions": {

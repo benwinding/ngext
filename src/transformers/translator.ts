@@ -52,6 +52,7 @@ async function saveRoutesFile(ROOT_DIR: string, routeModulePaths: string[]) {
     return {
       route: pageRoute.slice(2),
       file: pageFilePath,
+      layout: ''
     };
   });
   const ftrans = createRoutesFile(tsRouteFile, routePathsRelative);

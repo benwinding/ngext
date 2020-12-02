@@ -123,6 +123,7 @@ function createPageRouteItem(route: RouteObjs) {
   return `
   {
     path: "${route.route}",
+    component: ${route.layout || 'undefined'}
     loadChildren: () => import("${route.file}").then((m) => m.default),
   }`;
 }
@@ -138,6 +139,7 @@ function createRouteCatchAllObj(redirectTo: string) {
 export type RouteObjs = {
   route: string;
   file: string;
+  layout: string;
 }
 
 export function createRoutesFile(
