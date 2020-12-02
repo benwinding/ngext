@@ -1,12 +1,13 @@
 on:
   push:
-    paths:
-      - "src/*"
+    branches:
+      - master
 
 name:  🚀 Build and Publish
 jobs:
   build:
     name: Deploy Library
+    if: "contains(github.event.head_commit.message, 'ci-deploy')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -28,7 +29,6 @@ jobs:
       - name: Build Test
         run: npm run-script test
       - name: 🚀 Publish (if on master)
-        if: "github.ref == 'refs/heads/master' && contains(github.event.head_commit.message, 'ci-build')"
         uses: mikeal/merge-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
