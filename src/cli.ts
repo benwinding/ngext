@@ -33,6 +33,15 @@ const NG_PATH = path.join(ROOT_DIR, "node_modules", ".bin", "ng");
 // console.log("         NG_PATH:", NG_PATH);
 
 commander
+  .command("new [ProjectName]")
+  .description("Creates a new project")
+  .action(async (ProjectName) => {
+    const PROJECT_DIR = path.join(process.cwd(), ProjectName || "");
+    console.log("creating new project at: ", PROJECT_DIR);
+    await MakeNewProject(PROJECT_DIR);
+  });
+
+commander
   .command("build")
   .description("Builds the ngext app")
   .action(async () => {
@@ -63,15 +72,6 @@ commander
     await copyAndTranslateAllPages(ROOT_DIR);
     watchCopyAndTranslateAllPages(ROOT_DIR);
     execCmd(`${NG_PATH} serve`, INTERMEDIATE_DIR);
-  });
-
-commander
-  .command("new [ProjectName]")
-  .description("Creates a new project")
-  .action(async (ProjectName) => {
-    const PROJECT_DIR = path.join(process.cwd(), ProjectName || "");
-    console.log("creating new project at: ", PROJECT_DIR);
-    await MakeNewProject(PROJECT_DIR);
   });
 
 function CheckAngularCli() {
