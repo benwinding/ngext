@@ -1,12 +1,21 @@
-# ngext
-
 <p align="center">
-  <img width="300" src="https://i.imgur.com/nK7qiGI.png">
+  <img alt="ngext" width="300" src="https://i.imgur.com/nK7qiGI.png">
 </p>
 
-<p align="center">
+<div align="center">
 A routing framework for angular inspired by React's <a href="https://github.com/vercel/next.js">next.js</a>.
-</p>
+</div>
+
+<div align="center">
+
+<!-- [START badges] -->
+[![NPM Version](https://img.shields.io/npm/v/ngext.svg)](https://www.npmjs.com/package/ngext) 
+[![License](https://img.shields.io/npm/l/ngext.svg)](https://github.com/benwinding/ngext/blob/master/LICENSE) 
+[![Downloads/week](https://img.shields.io/npm/dm/ngext.svg)](https://www.npmjs.com/package/ngext) 
+[![Github Issues](https://img.shields.io/github/issues/benwinding/ngext.svg)](https://github.com/benwinding/ngext)
+<!-- [END badges] -->
+
+</div>
 
 ## Features
 
