@@ -1,6 +1,12 @@
 # ngext
 
-A routing framework for angular inspired by React's [next.js](https://github.com/vercel/next.js).
+<p align="center">
+  <img width="300" src="https://i.imgur.com/nK7qiGI.png">
+</p>
+
+<p align="center">
+A routing framework for angular inspired by React's <a href="https://github.com/vercel/next.js">next.js</a>.
+</p>
 
 ## Features
 
