@@ -27,58 +27,51 @@ function makeTestTsFile(tsContent: string): [SourceFile, Project] {
   return [tsSourceFile, project];
 }
 
-describe("transformers tests", () => {
-  test("get page module by decorator", () => {
-//     const [tsSourceFile] = makeTestTsFile(`@Component()
-// export class TestPageBreaksModule {}`);
-    // const compClass = t.getComponent(tsSourceFile);
-    expect(true).toBeTruthy();
+describe("getDecoratorPropertyValue tests", () => {
+  test("check handles null", () => {
+    const [testFile] = makeTestTsFile("class A {}");
+    const decorator = testFile.getClass("A").getDecorator("DECORATOR");
+    const result = t.getDecoratorPropertyValue(decorator, "ssss");
+    expect(result).toBeUndefined();
   });
+  test("check gets value", () => {
+    const [testFile] = makeTestTsFile('@Component({value: "test"}) class A {}');
+    const decorator = testFile.getClass("A").getDecorator("Component");
+    const result = t.getDecoratorPropertyValue(decorator, "value");
+    expect(result).toBe('"test"');
+  });
+});
 
-//   test("get decorator property value", () => {
-//     const [tsSourceFile] = makeTestTsFile(`@Component({
-//       template: \`VALUE\`
-//     })
-// export class TestPageBreaksModule {}`);
-//     const compClass = t.getComponent(tsSourceFile);
-//     const templateVal = t.getDecoratorPropertyValue(compClass.getDecorator('Component'));
-//     expect(templateVal).toBe('\`VALUE\`');
-//   });
-
-//   test("create @Component PageComp", () => {
-//     const [tsSourceFile, project] = makeTestTsFile(`@Component({
-//       template: \`VALUE\`
-//     })
-// export class TestPageBreaksModule {}`);
-//     const compClass = t.getComponent(tsSourceFile);
-//     const pageComponentClass = t.createNgPageComponent(compClass, project);
-//     const text = pageComponentClass.getText();
-//     expect(text).toBe(`@Component({
-//   template: \`VALUE\`
-// })
-// class PageComp {}`);
-//   });
-//   test("create @NgModule PageRoutingModule", () => {
-//     const [tsSourceFile, project] = makeTestTsFile(`@Component({
-//       template: \`VALUE\`
-//     })
-// export class TestPageBreaksModule {}`);
-//     const compClass = t.getComponent(tsSourceFile);
-//     const ComponentClass = t.createNgComponent(compClass, project);
-//     const text = ComponentClass.getText();
-//     expect(text).toBe(`@NgModule({
-//   imports: imports,
-//   declarations: declarations,
-// })
-// class TestPageBreaksModule {}`);
-//   });
-
-//   test("create @NgModule PageRoutingModule", () => {
-//     const [tsSourceFile, project] = makeTestTsFile(``);
-//     const importStatements = t.createImportStateMents(project);
-//     const line1 = importStatements[0].getText();
-//     expect(line1).toBe(`import { Component, NgModule } from "@angular/core";`);
-//     const line2 = importStatements[1].getText();
-//     expect(line2).toBe(`import { RouterModule } from "@angular/router";`);
-//   });
+describe("FindPageComponentImport tests", () => {
+  test("check gets value", () => {
+    const [testFile] = makeTestTsFile(`import { Component } from "ngext";`);
+    const found = t.FindPageComponentImport(testFile);
+    expect(found).toBeTruthy();
+  });
+  test("check doesn't find different import", () => {
+    const [testFile] = makeTestTsFile(
+      `import { Component } from "another/module";`
+    );
+    const found = t.FindPageComponentImport(testFile);
+    expect(found).toBeUndefined();
+  });
+  test("check fails with bad data", () => {
+    const [testFile] = makeTestTsFile(`csacaasc as as  A {}`);
+    const found = t.FindPageComponentImport(testFile);
+    expect(found).toBeUndefined();
+  });
+});
+describe("FindPageComponent tests", () => {
+  test("check gets @Component", () => {
+    const [testFile] = makeTestTsFile(`@Component({value: "test"}) class A {}`);
+    const found = t.FindPageComponent(testFile);
+    expect(found).toBeTruthy();
+  });
+  test("check doesn't find different decorator", () => {
+    const [
+      testFile,
+    ] = makeTestTsFile(`@MMMMComponent({value: "test"}) class A {}`);
+    const found = t.FindPageComponent(testFile);
+    expect(found).toBeUndefined();
+  });
 });

@@ -10,4 +10,4 @@ import { Component } from "@angular/core";
   `,
   styles: [],
 })
-export class DefaultLayoutComponent {}
+export class NgextDefaultLayout {}

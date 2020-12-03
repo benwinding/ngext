@@ -1,40 +1,28 @@
-import { SourceFile, ObjectLiteralExpression, Decorator, ts } from "ts-morph";
-import * as path from "path";
+import {
+  SourceFile,
+  ObjectLiteralExpression,
+  Decorator,
+  ClassDeclaration,
+  ImportDeclaration,
+} from "ts-morph";
 
-export function getDecoratorPropertyValue(
-  ComponentDecorator: Decorator | undefined,
-  property: string
-): string | undefined {
-  const args = ComponentDecorator?.getArguments();
-  if (!args || !args.length) {
-    return "";
+export function processComponentSourceFile(inputFile: SourceFile): SourceFile {
+  const foundImport = FindPageComponentImport(inputFile);
+  if (!foundImport) {
+    return inputFile;
   }
-  const obj = args[0] as ObjectLiteralExpression;
-  if (!obj) {
-    return "";
+  const foundPage = FindPageComponent(inputFile);
+  if (!foundPage) {
+    return inputFile;
   }
-  const templateVal = obj.getProperty(property)?.getLastChild()?.getText();
-  return templateVal;
-}
+  foundImport.remove();
 
-export function processComponentSourceFile(
-  tsSourceFile: SourceFile
-): SourceFile {
-  const foundComponent = tsSourceFile
-    .getClasses()
-    .find((a) => !!a.getDecorator("Component"));
-  if (!foundComponent) {
-    return tsSourceFile;
-  }
-  const dec = tsSourceFile.getImportDeclaration("ngext");
-  dec.remove();
-
-  const pmDecorator = foundComponent.getDecorator("Component");
+  const pmDecorator = foundPage.getDecorator("Component");
   const templateVal = getDecoratorPropertyValue(pmDecorator, "template");
   const importsVal = getDecoratorPropertyValue(pmDecorator, "imports");
-  const pageName = foundComponent.getName();
-  foundComponent.remove();
-  tsSourceFile.addClass({
+  const pageName = foundPage.getName();
+  foundPage.remove();
+  inputFile.addClass({
     name: "PageComp",
     decorators: [
       {
@@ -49,7 +37,7 @@ export function processComponentSourceFile(
     ],
   });
 
-  tsSourceFile.addVariableStatement({
+  inputFile.addVariableStatement({
     declarations: [
       {
         name: "imports",
@@ -60,7 +48,7 @@ export function processComponentSourceFile(
       },
     ],
   });
-  tsSourceFile.addVariableStatement({
+  inputFile.addVariableStatement({
     declarations: [
       {
         name: "declarations",
@@ -68,7 +56,7 @@ export function processComponentSourceFile(
       },
     ],
   });
-  tsSourceFile.addClass({
+  inputFile.addClass({
     isExported: true,
     isDefaultExport: true,
     name: pageName,
@@ -86,7 +74,7 @@ export function processComponentSourceFile(
     ],
   });
 
-  tsSourceFile.insertImportDeclarations(0, [
+  inputFile.insertImportDeclarations(0, [
     {
       moduleSpecifier: "@angular/core",
       namedImports: ["Component", "NgModule"],
@@ -97,78 +85,48 @@ export function processComponentSourceFile(
     },
   ]);
 
-  return tsSourceFile;
+  return inputFile;
 }
 
-/* 
-import { Routes } from "@angular/router";
-
-export const routes: Routes = [
-  {
-    path: "test1",
-    loadChildren: () => import("./pages/test1").then((m) => m.Page),
-  },
-  {
-    path: "nested/test2",
-    loadChildren: () => import("./pages/nested/test2").then((m) => m.Page),
-  },
-  {
-    path: "**",
-    redirectTo: "test",
-  },
-];
-*/
-
-function createPageRouteItem(route: RouteObjs) {
-  return `
-  {
-    path: "${route.route}",
-    component: ${route.layout || 'undefined'},
-    loadChildren: () => import("${route.file}").then((m) => m.default),
-  }`;
+export function FindPageComponentImport(
+  inputFile: SourceFile
+): ImportDeclaration | undefined {
+  const ngextImport = inputFile.getImportDeclaration("ngext");
+  if (!ngextImport) {
+    return undefined;
+  }
+  const pageComponentImported = ngextImport
+    .getNamedImports()
+    .find((a) => a.getText() === "Component");
+  if (!pageComponentImported) {
+    return undefined;
+  }
+  return ngextImport;
+}
+export function FindPageComponent(
+  inputFile: SourceFile
+): ClassDeclaration | undefined {
+  const foundPageComponent = inputFile
+    .getClasses()
+    .find((a) => !!a.getDecorator("Component"));
+  if (!foundPageComponent) {
+    return undefined;
+  }
+  return foundPageComponent;
 }
 
-function createRouteCatchAllObj(redirectTo: string) {
-  return `
-  {
-    path: "**",
-    redirectTo: "${redirectTo}",
-  }`;
-}
-
-export type RouteObjs = {
-  route: string;
-  file: string;
-  layout: string;
-}
-
-export function createRoutesFile(
-  tsfile: SourceFile,
-  routeModulePathsRelative: RouteObjs[]
-): SourceFile {
-  // initialize
-  tsfile.insertImportDeclarations(0, [
-    {
-      moduleSpecifier: "@angular/router",
-      namedImports: ["Routes"],
-    },
-  ]);
-  const routesLiteral = [
-    ...routeModulePathsRelative.map(createPageRouteItem), 
-    createRouteCatchAllObj('404')
-  ];
-  const routeArrayLiteral = `[
-  ${routesLiteral.join(',')}
-]`;
-  const statement = tsfile.addVariableStatement({
-    declarations: [
-      {
-        name: "routes",
-        initializer: w => w.write(routeArrayLiteral),
-        type: 'Routes'
-      },
-    ],
-  });
-  statement.setIsExported(true);
-  return tsfile;
+export function getDecoratorPropertyValue(
+  ComponentDecorator: Decorator | undefined,
+  property: string
+): string | undefined {
+  const args = ComponentDecorator?.getArguments();
+  if (!args || !args.length) {
+    return undefined;
+  }
+  const obj = args[0] as ObjectLiteralExpression;
+  if (!obj) {
+    return undefined;
+  }
+  const templateVal = obj.getProperty(property)?.getLastChild()?.getText();
+  return templateVal;
 }

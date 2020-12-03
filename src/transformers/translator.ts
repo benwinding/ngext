@@ -3,15 +3,9 @@ import * as fs from "fs-extra";
 import { Project, SourceFile } from "ts-morph";
 import watch from "glob-watcher";
 
-import {
-  createRoutesFile,
-  processComponentSourceFile,
-  RouteObjs,
-} from "./transformers";
-import {
-  convertToRelativePath,
-  stripTsExtension,
-} from "../utils";
+import { processComponentSourceFile } from "./transformers";
+import { CreateRoutesFile, MakeRouteObjs, RouteObj } from "./createRoutesFile";
+import { convertToRelativePath, stripTsExtension } from "../utils";
 
 export async function watchCopyAndTranslateAllPages(ROOT_DIR: string) {
   const pagesDirGlob = path.join(ROOT_DIR, "pages/**/*.ts");
@@ -44,18 +38,8 @@ async function saveRoutesFile(ROOT_DIR: string, routeModulePaths: string[]) {
   const tsRouteFile = project.createSourceFile(routeFilePath, "", {
     overwrite: true,
   });
-  const routePathsRelative: RouteObjs[] = routeModulePaths.map((p) => {
-    const pagesDir = path.join(ROOT_DIR, 'pages');
-    const modulePathNoTs = stripTsExtension(p);
-    const pageFilePath = convertToRelativePath(ROOT_DIR, modulePathNoTs);
-    const pageRoute = convertToRelativePath(pagesDir, modulePathNoTs);
-    return {
-      route: pageRoute.slice(2),
-      file: pageFilePath,
-      layout: ''
-    };
-  });
-  const ftrans = createRoutesFile(tsRouteFile, routePathsRelative);
+  const routeObjs = MakeRouteObjs(ROOT_DIR, routeModulePaths)
+  const ftrans = CreateRoutesFile(tsRouteFile, routeObjs);
   console.log("- saving routes file: ", routeFilePath);
   ftrans.formatText();
   ftrans.save();
@@ -69,7 +53,7 @@ async function saveFile(ROOT_DIR: string, file: SourceFile) {
   file.formatText();
   const fileText = file.getText();
   await fs.mkdirp(dirPath);
-  await saveIfUpdated(filePathNew, fileText)
+  await saveIfUpdated(filePathNew, fileText);
 }
 
 async function saveIfUpdated(filePathNew: string, newText: string) {
@@ -92,12 +76,9 @@ function translateMatch(sourceFile: SourceFile): SourceFile {
   return sourceFileConverted;
 }
 
-function convertToTargetPath(
-  ROOT_DIR: string,
-  inputFilePath: string
-): string {
+function convertToTargetPath(ROOT_DIR: string, inputFilePath: string): string {
   const baseRelativePath = convertToRelativePath(ROOT_DIR, inputFilePath);
-  const ngextSrc = path.join(ROOT_DIR, ".ngext", "src")
+  const ngextSrc = path.join(ROOT_DIR, ".ngext", "src");
   const targetPath = path.join(ngextSrc, baseRelativePath);
   return targetPath;
 }
