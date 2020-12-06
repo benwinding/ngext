@@ -7,6 +7,7 @@ import {
   watchCopyAndTranslateAllPages,
 } from "./transformers";
 import { InitNgextDir, MakeNewProject } from "./initialize/create-template";
+import { ReadConfig } from "./initialize/config-reader";
 const packageJson = require(path.join(__dirname, "../package.json"));
 
 const execCmd = (cmd, directory) => {
@@ -28,10 +29,6 @@ const ROOT_DIR = process.cwd();
 const INTERMEDIATE_DIR = path.join(ROOT_DIR, ".ngext");
 const NG_PATH = path.join(ROOT_DIR, "node_modules", ".bin", "ng");
 
-// console.log("        ROOT_DIR:", ROOT_DIR);
-// console.log("INTERMEDIATE_DIR:", INTERMEDIATE_DIR);
-// console.log("         NG_PATH:", NG_PATH);
-
 commander
   .command("new [ProjectName]")
   .description("Creates a new project")
@@ -46,8 +43,9 @@ commander
   .description("Builds the ngext app")
   .action(async () => {
     CheckAngularCli();
-    await InitNgextDir(ROOT_DIR);
-    await copyAndTranslateAllPages(ROOT_DIR);
+    const conf = await ReadConfig(ROOT_DIR);
+    await InitNgextDir(ROOT_DIR, conf);
+    await copyAndTranslateAllPages(ROOT_DIR, conf);
     await execCmd(`${NG_PATH} build`, INTERMEDIATE_DIR);
     await Copy404File(INTERMEDIATE_DIR);
   });
@@ -68,9 +66,10 @@ commander
   .description("Runs the ngext app locally")
   .action(async () => {
     CheckAngularCli();
-    await InitNgextDir(ROOT_DIR);
-    await copyAndTranslateAllPages(ROOT_DIR);
-    watchCopyAndTranslateAllPages(ROOT_DIR);
+    const conf = await ReadConfig(ROOT_DIR);
+    await InitNgextDir(ROOT_DIR, conf);
+    await copyAndTranslateAllPages(ROOT_DIR, conf);
+    watchCopyAndTranslateAllPages(ROOT_DIR, conf);
     execCmd(`${NG_PATH} serve`, INTERMEDIATE_DIR);
   });
 

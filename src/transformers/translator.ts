@@ -6,18 +6,19 @@ import watch from "glob-watcher";
 import { processComponentSourceFile } from "./transformers";
 import { CreateRoutesFile, MakeRouteObjs, RouteObj } from "./createRoutesFile";
 import { convertToRelativePath, stripTsExtension } from "../utils";
+import { NgextConfig } from "initialize/config-reader";
 
-export async function watchCopyAndTranslateAllPages(ROOT_DIR: string) {
+export async function watchCopyAndTranslateAllPages(ROOT_DIR: string, ngextConf: NgextConfig) {
   const pagesDirGlob = path.join(ROOT_DIR, "pages/**/*.ts");
   console.log("- watching pages: ", pagesDirGlob);
   const watcher = watch([pagesDirGlob]);
   watcher.on("change", (e, filename) => {
     console.log("-> file page changed: ", filename);
-    copyAndTranslateAllPages(ROOT_DIR);
+    copyAndTranslateAllPages(ROOT_DIR, ngextConf);
   });
 }
 
-export async function copyAndTranslateAllPages(ROOT_DIR: string) {
+export async function copyAndTranslateAllPages(ROOT_DIR: string, ngextConf: NgextConfig) {
   const pagesDirGlob = path.join(ROOT_DIR, "pages/**/*.ts");
   console.log("- building pages: ", pagesDirGlob);
   const project = new Project();

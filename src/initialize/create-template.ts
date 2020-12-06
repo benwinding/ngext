@@ -5,12 +5,14 @@ import fs from "fs-extra";
 import simpleGit from "simple-git";
 
 import { convertToRelativePath } from "../utils";
+import { NgextConfig } from "./config-reader";
 
-export async function InitNgextDir(ROOT_DIR: string) {
+export async function InitNgextDir(ROOT_DIR: string, conf: NgextConfig) {
   const PROJECT_NAME = path.basename(ROOT_DIR);
   const vars = { 
     PROJECT_NAME: PROJECT_NAME, 
-    "linkItem.path": "{{linkItem.path}}" 
+    "linkItem.path": "{{linkItem.path}}",
+    PROJECT_ENV: JSON.stringify(conf.env)
   };
   const inDir = path.join(__dirname, "..", "..", "templates", ".ngext");
   const outDir = path.join(ROOT_DIR, ".ngext");
