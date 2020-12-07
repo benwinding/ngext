@@ -110,9 +110,18 @@ export function addLayoutImportDeclarations(
   if (!layouts.length) {
     return;
   }
+  const layoutsIdsAdded = new Set<string>();
+  const layoutsUnique = layouts.reduce((acc, cur) => {
+    const layoutId = cur.importPath + cur.componentName;
+    if (layoutsIdsAdded.has(layoutId)) {
+      return acc;
+    }
+    layoutsIdsAdded.add(layoutId);
+    return acc.concat(cur);
+  }, [] as RouteLayout[]);
   tsFile.insertImportDeclarations(
     0,
-    layouts.map((layout) => ({
+    layoutsUnique.map((layout) => ({
       namedImports: [layout.componentName],
       moduleSpecifier: layout.importPath,
     }))
