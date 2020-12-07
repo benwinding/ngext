@@ -6,7 +6,7 @@ import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { AppRouterModule } from "./app.routing";
 
-(window as any).process ={
+window.PROCESS = {
   env: {{PROJECT_ENV}}
 };
 
