@@ -1,6 +1,3 @@
-import { Component as NgComponent, NgModule } from "@angular/core";
-// import { RouterModule } from "@angular/router";
-
 type AngularModule = any;
 type AngularComponent = any;
 
@@ -9,6 +6,7 @@ export interface Type<T> extends Function { new (...args: any[]): T; }
 export interface PageComponentProps {
   layout?: Type<AngularComponent>;
   template: string;
+  styles?: string[];
   imports?: Type<AngularModule>[];
 }
 
