@@ -23,6 +23,7 @@ export function ProcessComponentSourceFile(
 
   const pmDecorator = foundPage.getDecorator("Component");
   const importsVal = getDecoratorPropertyValue(pmDecorator, "imports", true);
+  const redirectVal = getDecoratorPropertyValue(pmDecorator, "redirect", true);
   const guardsVal = getDecoratorPropertyValue(pmDecorator, "guards", true);
   const layoutVal = getDecoratorPropertyValue(pmDecorator, "layout", true);
   const layoutImport = inputFile.getImportDeclaration(
@@ -32,13 +33,21 @@ export function ProcessComponentSourceFile(
   foundPage.setIsDefaultExport(false);
   foundPage.setIsExported(false);
 
+  let routerProps = `path: "", component: ${pageName}`
+  if (guardsVal) {
+    routerProps += `, canActivate: ${guardsVal}`
+  }
+  if (redirectVal) {
+    routerProps += `, redirectTo: ${redirectVal}`
+  }
+
   inputFile.addVariableStatement({
     declarations: [
       {
         name: "imports",
         initializer: `[
-  ...${importsVal},
-  RouterModule.forChild([{ path: "", canActivate: ${guardsVal}, component: ${pageName} }])
+  ...${importsVal || '[]'},
+  RouterModule.forChild([{ ${routerProps} }])
 ];`,
       },
     ],

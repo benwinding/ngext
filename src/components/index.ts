@@ -7,6 +7,7 @@ export interface Type<T> extends Function { new (...args: any[]): T; }
 export interface PageComponentProps {
   layout?: Type<AngularComponent>;
   template: string;
+  redirect?: string;
   styles?: string[];
   imports?: Type<AngularModule>[];
   guards?: Type<AngularService>[];

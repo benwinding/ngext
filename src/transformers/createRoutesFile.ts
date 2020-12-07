@@ -147,6 +147,7 @@ export function createPageRouteItem(route: RouteObj): string {
   {
     path: "${route.routePath}",
     component: ${layoutName},
+    pathMatch: "full",
     loadChildren: () => import("${route.filePath}").then((m) => m.default),
   }`;
 }
