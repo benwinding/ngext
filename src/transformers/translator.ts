@@ -7,7 +7,7 @@ import watch from "glob-watcher";
 import { ProcessComponentSourceFile } from "./transformers";
 import { CreateRoutesFile, MakeRouteObjs } from "./createRoutesFile";
 import { convertToRelativePath } from "../utils";
-import { NgextConfig } from "initialize/config-reader";
+import { NgextConfig } from "../types/ngext-config";
 
 export async function watchCopyAndTranslateAllPages(
   ROOT_DIR: string,

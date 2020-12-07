@@ -5,7 +5,7 @@ import fs from "fs-extra";
 import simpleGit from "simple-git";
 
 import { convertToRelativePath } from "../utils";
-import { NgextConfig } from "./config-reader";
+import { NgextConfig } from "../types/ngext-config";
 
 export async function InitNgextDir(ROOT_DIR: string, conf: NgextConfig) {
   const PROJECT_NAME = path.basename(ROOT_DIR);

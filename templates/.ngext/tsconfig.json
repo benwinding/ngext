@@ -11,7 +11,9 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "lib": ["dom"],
+    "lib": ["es2017", "dom"],
+    "typeRoots": ["node_modules/@types", "~/types/*"],
+    "types": ["node"],
     "paths": {
       "~": ["../"],
       "~/*": ["../*"]
