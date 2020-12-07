@@ -2,7 +2,9 @@ import path from "path";
 import fs from "fs-extra";
 
 export interface NgextConfig {
-  env: {}
+  env?: {};
+  scripts?: [];
+  styles?: [];
 }
 
 const defaultConfig: NgextConfig = {

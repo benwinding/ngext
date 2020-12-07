@@ -28,7 +28,9 @@
                 "input": "../static",
                 "output": "/"
               }
-            ]
+            ],
+            "scripts": {{PROJECT_SCRIPTS}},
+            "styles": {{PROJECT_STYLES}}
           },
           "configurations": {
             "dev": {
