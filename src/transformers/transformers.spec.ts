@@ -75,3 +75,14 @@ describe("FindPageComponent tests", () => {
     expect(found).toBeUndefined();
   });
 });
+describe("ProcessComponentSourceFile tests", () => {
+  test("check gets @Component", () => {
+    const [testFile] = makeTestTsFile(`
+    import { Component } from "ngext"; 
+    import { MyLayout } from "some/import/path"; 
+    @Component({template: "test", layout: MyLayout}) 
+    class A { thisIsATest = 99;}`);
+    const found = t.ProcessComponentSourceFile(testFile);
+    expect(found).toBeTruthy();
+  });
+});

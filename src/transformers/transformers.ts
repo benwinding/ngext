@@ -5,37 +5,31 @@ import {
   ClassDeclaration,
   ImportDeclaration,
 } from "ts-morph";
+import { stripQuotes } from "../utils";
+import { NgextPage } from "../types/ngext-page";
 
-export function processComponentSourceFile(inputFile: SourceFile): SourceFile {
+export function ProcessComponentSourceFile(
+  inputFile: SourceFile
+): NgextPage | undefined {
   const foundImport = FindPageComponentImport(inputFile);
   if (!foundImport) {
-    return inputFile;
+    return undefined;
   }
   const foundPage = FindPageComponent(inputFile);
   if (!foundPage) {
-    return inputFile;
+    return undefined;
   }
   foundImport.remove();
 
   const pmDecorator = foundPage.getDecorator("Component");
-  const templateVal = getDecoratorPropertyValue(pmDecorator, "template");
-  const importsVal = getDecoratorPropertyValue(pmDecorator, "imports");
+  const layoutVal = getDecoratorPropertyValue(pmDecorator, "layout", true);
+  const layoutImport = inputFile.getImportDeclaration(
+    (i) => !!i.getNamedImports().find((s) => s.getName() === layoutVal)
+  );
+  const importsVal = getDecoratorPropertyValue(pmDecorator, "imports", true);
   const pageName = foundPage.getName();
-  foundPage.remove();
-  inputFile.addClass({
-    name: "PageComp",
-    decorators: [
-      {
-        name: "Component",
-        arguments: [
-          (w) =>
-            w.write(`{
-  template: ${templateVal}
-}`),
-        ],
-      },
-    ],
-  });
+  foundPage.setIsDefaultExport(false);
+  foundPage.setIsExported(false);
 
   inputFile.addVariableStatement({
     declarations: [
@@ -43,7 +37,7 @@ export function processComponentSourceFile(inputFile: SourceFile): SourceFile {
         name: "imports",
         initializer: `[
   ...${importsVal},
-  RouterModule.forChild([{ path: "**", component: PageComp }])
+  RouterModule.forChild([{ path: "**", component: ${pageName} }])
 ];`,
       },
     ],
@@ -52,14 +46,14 @@ export function processComponentSourceFile(inputFile: SourceFile): SourceFile {
     declarations: [
       {
         name: "declarations",
-        initializer: "[PageComp];",
+        initializer: `[${pageName}];`,
       },
     ],
   });
   inputFile.addClass({
     isExported: true,
     isDefaultExport: true,
-    name: pageName,
+    name: pageName + "_Routing",
     decorators: [
       {
         name: "NgModule",
@@ -85,7 +79,17 @@ export function processComponentSourceFile(inputFile: SourceFile): SourceFile {
     },
   ]);
 
-  return inputFile;
+  const page: NgextPage = {
+    sourceFile: inputFile,
+  };
+  if (layoutImport) {
+    page.layout = {
+      componentName: layoutVal,
+      importPath: stripQuotes(layoutImport.getModuleSpecifier().getText()),
+    };
+  }
+  console.log('--- > Processed: ', layoutVal);
+  return page;
 }
 
 export function FindPageComponentImport(
@@ -117,7 +121,8 @@ export function FindPageComponent(
 
 export function getDecoratorPropertyValue(
   ComponentDecorator: Decorator | undefined,
-  property: string
+  property: string,
+  removeToo?: boolean
 ): string | undefined {
   const args = ComponentDecorator?.getArguments();
   if (!args || !args.length) {
@@ -127,6 +132,10 @@ export function getDecoratorPropertyValue(
   if (!obj) {
     return undefined;
   }
-  const templateVal = obj.getProperty(property)?.getLastChild()?.getText();
+  const template = obj.getProperty(property);
+  const templateVal = template?.getLastChild()?.getText();
+  if (removeToo) {
+    template?.remove();
+  }
   return templateVal;
 }

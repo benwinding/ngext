@@ -1,6 +1,7 @@
 import { SourceFile } from "ts-morph";
 import * as path from "path";
 import { convertToRelativePath, stripTsExtension } from "../utils";
+import { NgextPage } from "../types/ngext-page";
 
 /* 
 import { Routes } from "@angular/router";
@@ -23,13 +24,14 @@ export const routes: Routes = [
 
 export function CreateRoutesFile(
   tsfile: SourceFile,
-  routeModulePathsRelative: RouteObj[]
+  routeObjs: RouteObj[]
 ): SourceFile {
   // initialize
   addAngularImportDeclarations(tsfile);
-  const firstRoutePath = routeModulePathsRelative[0].routePath;
+  addLayoutImportDeclarations(tsfile, routeObjs);
+  const firstRoutePath = routeObjs[0].routePath;
   const routesLiteral = [
-    ...routeModulePathsRelative.map(createPageRouteItem),
+    ...routeObjs.map(createPageRouteItem),
     createRouteCatchAllObj(firstRoutePath),
   ];
   const routeArrayLiteral = `[
@@ -50,10 +52,10 @@ export function CreateRoutesFile(
 
 export function MakeRouteObjs(
   ROOT_DIR: string,
-  pagePaths: string[]
+  routeModuleFiles: NgextPage[]
 ): RouteObj[] {
-  const routes: RouteObj[] = pagePaths.map((pagePage) => {
-    const routeObj: RouteObj = MakeRouteObj(ROOT_DIR, pagePage);
+  const routes: RouteObj[] = routeModuleFiles.map((pageFile) => {
+    const routeObj: RouteObj = MakeRouteObj(ROOT_DIR, pageFile);
     return routeObj;
   });
   return routes;
@@ -61,18 +63,30 @@ export function MakeRouteObjs(
 
 export function MakeRouteObj(
   ROOT_DIR: string,
-  routeModulePath: string
+  pageComponent: NgextPage
 ): RouteObj {
   const pagesDir = path.join(ROOT_DIR, "pages");
-  const modulePathNoTs = stripTsExtension(routeModulePath);
+  const modulePathNoTs = stripTsExtension(
+    pageComponent.sourceFile.getFilePath()
+  );
   const pageFilePath = convertToRelativePath(ROOT_DIR, modulePathNoTs);
   const pageRoute = convertToRelativePath(pagesDir, modulePathNoTs);
   const routeObj: RouteObj = {
     routePath: pageRoute.slice(2),
     filePath: pageFilePath,
-    layout: "",
+    layout: GetLayout(pageComponent),
   };
   return routeObj;
+}
+
+export function GetLayout(pageComponent: NgextPage): RouteLayout {
+  if (!pageComponent.layout) {
+    return undefined;
+  }
+  return {
+    componentName: pageComponent.layout.componentName,
+    importPath: pageComponent.layout.importPath,
+  };
 }
 
 export function addAngularImportDeclarations(tsFile: SourceFile): void {
@@ -88,11 +102,29 @@ export function addAngularImportDeclarations(tsFile: SourceFile): void {
   ]);
 }
 
+export function addLayoutImportDeclarations(
+  tsFile: SourceFile,
+  routeObjs: RouteObj[]
+): void {
+  const layouts = routeObjs.filter((r) => !!r.layout).map((r) => r.layout);
+  if (!layouts.length) {
+    return;
+  }
+  tsFile.insertImportDeclarations(
+    0,
+    layouts.map((layout) => ({
+      namedImports: [layout.componentName],
+      moduleSpecifier: layout.importPath,
+    }))
+  );
+}
+
 export function createPageRouteItem(route: RouteObj): string {
+  const layoutName = route.layout?.componentName || "NgextDefaultLayout";
   return `
   {
     path: "${route.routePath}",
-    component: ${route.layout || "NgextDefaultLayout"},
+    component: ${layoutName},
     loadChildren: () => import("${route.filePath}").then((m) => m.default),
   }`;
 }
@@ -108,5 +140,10 @@ export function createRouteCatchAllObj(redirectTo: string): string {
 export type RouteObj = {
   routePath: string;
   filePath: string;
-  layout?: string;
+  layout?: RouteLayout;
+};
+
+export type RouteLayout = {
+  componentName: string;
+  importPath: string;
 };

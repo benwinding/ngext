@@ -1,16 +1,16 @@
 import { Component as NgComponent, NgModule } from "@angular/core";
 // import { RouterModule } from "@angular/router";
 
-type AngularModule = any;
-type AngularComponent = any;
+type AngularModule<T> = new () => T;
+type AngularComponent<T> = new () => T;
 
-export interface PageComponentProps {
-  layout?: AngularComponent;
+export interface PageComponentProps<T> {
+  layout?: AngularComponent<T>;
   template: string;
-  imports?: AngularModule[];
+  imports?: AngularModule<T>[];
 }
 
-export function Component(input: PageComponentProps) {
+export function Component(input: PageComponentProps<any>) {
   return function (constructorFunction: Function) {
     // const { template, imports } = input;
     // @NgComponent({

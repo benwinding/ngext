@@ -17,3 +17,11 @@ export function stripTsExtension(inputFilePath: string): string {
   return inputFilePath.slice(0, -3);
 }
 
+export function stripQuotes(inputStr: string): string {
+  const remove = ['"', "'", "\'", '\"'];
+  for (const r of remove) {
+    inputStr.startsWith(r);
+    return inputStr.slice(r.length, -r.length);
+  }
+  return inputStr;
+}
