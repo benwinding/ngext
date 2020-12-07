@@ -22,11 +22,12 @@ export function ProcessComponentSourceFile(
   foundImport.remove();
 
   const pmDecorator = foundPage.getDecorator("Component");
+  const importsVal = getDecoratorPropertyValue(pmDecorator, "imports", true);
+  const guardsVal = getDecoratorPropertyValue(pmDecorator, "guards", true);
   const layoutVal = getDecoratorPropertyValue(pmDecorator, "layout", true);
   const layoutImport = inputFile.getImportDeclaration(
     (i) => !!i.getNamedImports().find((s) => s.getName() === layoutVal)
   );
-  const importsVal = getDecoratorPropertyValue(pmDecorator, "imports", true);
   const pageName = foundPage.getName();
   foundPage.setIsDefaultExport(false);
   foundPage.setIsExported(false);
@@ -37,7 +38,7 @@ export function ProcessComponentSourceFile(
         name: "imports",
         initializer: `[
   ...${importsVal},
-  RouterModule.forChild([{ path: "", component: ${pageName} }])
+  RouterModule.forChild([{ path: "", canActivate: ${guardsVal}, component: ${pageName} }])
 ];`,
       },
     ],
