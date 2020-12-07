@@ -70,3 +70,14 @@ describe("MakeRouteObj test", () => {
     // expect(result.filePath).toBe("./pages/test");
   });
 });
+describe("NormaliseRoutePath test", () => {
+  test("Check route path matches", () => {
+    expect(R.NormaliseRoutePath('./some/other/thing')).toBe("some/other/thing");
+  });
+  test("Check index is converted", () => {
+    expect(R.NormaliseRoutePath('./some/other/index')).toBe("some/other");
+  });
+  test("Check index is converted", () => {
+    expect(R.NormaliseRoutePath('./index')).toBe("");
+  });
+});

@@ -72,11 +72,24 @@ export function MakeRouteObj(
   const pageFilePath = convertToRelativePath(ROOT_DIR, modulePathNoTs);
   const pageRoute = convertToRelativePath(pagesDir, modulePathNoTs);
   const routeObj: RouteObj = {
-    routePath: pageRoute.slice(2),
+    routePath: NormaliseRoutePath(pageRoute),
     filePath: pageFilePath,
     layout: GetLayout(pageComponent),
   };
   return routeObj;
+}
+
+export function NormaliseRoutePath(pageRoute: string): string {
+  const removeDotSlash = pageRoute.startsWith("./")
+    ? pageRoute.slice(2)
+    : pageRoute;
+  const removeIndex1 = removeDotSlash.endsWith("/index")
+    ? removeDotSlash.slice(0, -6)
+    : removeDotSlash;
+  const removeIndex2 = removeIndex1.endsWith("index")
+    ? removeIndex1.slice(0, -5)
+    : removeIndex1;
+  return removeIndex2;
 }
 
 export function GetLayout(pageComponent: NgextPage): RouteLayout {

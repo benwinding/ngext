@@ -37,7 +37,7 @@ export function ProcessComponentSourceFile(
         name: "imports",
         initializer: `[
   ...${importsVal},
-  RouterModule.forChild([{ path: "**", component: ${pageName} }])
+  RouterModule.forChild([{ path: "", component: ${pageName} }])
 ];`,
       },
     ],
