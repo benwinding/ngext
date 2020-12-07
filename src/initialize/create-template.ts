@@ -13,8 +13,9 @@ export async function InitNgextDir(ROOT_DIR: string, conf: NgextConfig) {
     PROJECT_NAME: PROJECT_NAME, 
     "linkItem.path": "{{linkItem.path}}",
     PROJECT_ENV: JSON.stringify(conf.env),
-    PROJECT_SCRIPTS: JSON.stringify(conf.scripts|| []),
-    PROJECT_STYLES: JSON.stringify(conf.styles|| [])
+    PROJECT_SCRIPTS: JSON.stringify(conf.scripts || []),
+    PROJECT_STYLES: JSON.stringify(conf.styles || []),
+    PROJECT_BASEHREF: JSON.stringify(conf.baseHref || '/'),
   };
   const inDir = path.join(__dirname, "..", "..", "templates", ".ngext");
   const outDir = path.join(ROOT_DIR, ".ngext");

@@ -5,6 +5,7 @@ export interface NgextConfig {
   env?: {};
   scripts?: [];
   styles?: [];
+  baseHref?: string;
 }
 
 const defaultConfig: NgextConfig = {
