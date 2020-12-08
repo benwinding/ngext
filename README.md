@@ -21,6 +21,8 @@ A routing framework for angular inspired by React's <a href="https://github.com/
 
 - File-based routing (no more routing modules!)
 - Lazy loaded modules generation
+- Dynamic configurations (no more static angular.json files)
+- Declarative route layouts
 
 ## Get Started
 
