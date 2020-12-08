@@ -68,9 +68,9 @@ describe("FindPageComponent tests", () => {
     expect(found).toBeTruthy();
   });
   test("check doesn't find different decorator", () => {
-    const [
-      testFile,
-    ] = makeTestTsFile(`@MMMMComponent({value: "test"}) class A {}`);
+    const [testFile] = makeTestTsFile(
+      `@MMMMComponent({value: "test"}) class A {}`
+    );
     const found = t.FindPageComponent(testFile);
     expect(found).toBeUndefined();
   });
