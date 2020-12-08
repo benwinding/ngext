@@ -49,6 +49,7 @@ commander
     await copyAndTranslateAllPages(ROOT_DIR, conf);
     await execCmd(`${NG_PATH} build`, INTERMEDIATE_DIR);
     await Copy404File(INTERMEDIATE_DIR, conf);
+    await CopyBuild(INTERMEDIATE_DIR, ROOT_DIR, conf);
   });
 
 commander.version(packageJson.version, "-v, --version");
@@ -64,6 +65,24 @@ async function Copy404File(INTERMEDIATE_DIR: string, conf: NgextConfig) {
   console.log("  src=", sourceHtmlFile);
   console.log(" dest=", targetHtmlFile);
   return fs.copyFile(sourceHtmlFile, targetHtmlFile);
+}
+
+async function CopyBuild(INTERMEDIATE_DIR: string, ROOT_DIR: string, conf: NgextConfig) {
+  const outputDir = conf.dist ? conf.dist : 'dist';
+  if (!conf.dist) {
+    console.log('"dist" not specified in ngext.config, using: ' + outputDir);
+  }
+  const sourceBuild = path.join(INTERMEDIATE_DIR, "dist");
+  const targetBuild = path.join(ROOT_DIR, outputDir);
+
+  if (fs.pathExistsSync(targetBuild)) {
+    // fs.rmdirSync(targetBuild);
+  }
+
+  console.log("--> copying dist files:");
+  console.log("  src=", sourceBuild);
+  console.log(" dest=", targetBuild);
+  return fs.copy(sourceBuild, targetBuild, {overwrite: true, recursive: true});
 }
 
 commander

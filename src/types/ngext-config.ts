@@ -4,4 +4,5 @@ export interface NgextConfig {
   styles?: [];
   baseHref?: string;
   useFallback404?: boolean;
+  dist?: string;
 }
