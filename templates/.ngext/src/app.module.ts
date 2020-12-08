@@ -5,10 +5,12 @@ import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
 import { AppRouterModule } from "./app.routing";
+{{GLOBAL_MODULE_IMPORT}}
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    ...[{{GLOBAL_MODULE_NAME}}],
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
