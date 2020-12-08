@@ -12,12 +12,18 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "typeRoots": ["node_modules/@types"],
     "lib": ["es2017", "dom"],
     "paths": {
       "~": ["."],
       "~/*": ["./*"]
     }
   },
-  "include": ["pages", "components", "guards", "layouts"]  
+  "include": [
+    ".",
+    "pages",
+    "components",
+    "guards",
+    "layouts",
+    "node_modules/ngext"
+  ]
 }
