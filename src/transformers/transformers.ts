@@ -33,12 +33,12 @@ export function ProcessComponentSourceFile(
   foundPage.setIsDefaultExport(false);
   foundPage.setIsExported(false);
 
-  let routerProps = `path: "", component: ${pageName}`
+  let routerProps = `path: "", component: ${pageName}`;
   if (guardsVal) {
-    routerProps += `, canActivate: ${guardsVal}`
+    routerProps += `, canActivate: ${guardsVal}`;
   }
   if (redirectVal) {
-    routerProps += `, redirectTo: ${redirectVal}`
+    routerProps += `, redirectTo: ${redirectVal}`;
   }
 
   inputFile.addVariableStatement({
@@ -46,7 +46,8 @@ export function ProcessComponentSourceFile(
       {
         name: "imports",
         initializer: `[
-  ...${importsVal || '[]'},
+  CommonModule,
+  ...${importsVal || "[]"},
   RouterModule.forChild([{ ${routerProps} }])
 ];`,
       },
@@ -89,6 +90,14 @@ export function ProcessComponentSourceFile(
     },
   ]);
 
+  const isCommonModuleImported = IsCommonModuleImported(inputFile);
+  if (!isCommonModuleImported) {
+    inputFile.addImportDeclaration({
+      moduleSpecifier: "@angular/common",
+      namedImports: ["CommonModule"],
+    });
+  }
+
   const page: NgextPage = {
     sourceFile: inputFile,
   };
@@ -98,8 +107,19 @@ export function ProcessComponentSourceFile(
       importPath: stripQuotes(layoutImport.getModuleSpecifier().getText()),
     };
   }
-  console.log('--- > Processed: ', layoutVal);
+  console.log("--- > Processed: ", layoutVal);
   return page;
+}
+
+export function IsCommonModuleImported(inputFile: SourceFile): boolean {
+  const angularCommonImport = inputFile.getImportDeclaration("@angular/common");
+  if (!angularCommonImport) {
+    return false;
+  }
+  const isCommonModuleImported = angularCommonImport
+  .getNamedImports()
+  .some((i) => i.getName() === "CommonModule");
+  return isCommonModuleImported;
 }
 
 export function FindPageComponentImport(
