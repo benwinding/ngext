@@ -76,7 +76,11 @@ async function CopyBuild(INTERMEDIATE_DIR: string, ROOT_DIR: string, conf: Ngext
   const targetBuild = path.join(ROOT_DIR, outputDir);
 
   if (fs.pathExistsSync(targetBuild)) {
-    // fs.rmdirSync(targetBuild);
+    try {
+      fs.rmdirSync(targetBuild);      
+    } catch (error) {
+      console.error(`--> Error deleting dist target: "${targetBuild}"`, error);
+    }
   }
 
   console.log("--> copying dist files:");
