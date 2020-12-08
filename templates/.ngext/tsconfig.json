@@ -12,7 +12,7 @@
     "importHelpers": true,
     "target": "es2015",
     "lib": ["es2017", "dom"],
-    "typeRoots": ["node_modules/@types", "~/types/*", "./types/*"],
+    "typeRoots": ["node_modules/@types", "~/.ngext/types/*", "~/types/*"],
     "paths": {
       "~": ["../"],
       "~/*": ["../*"]
