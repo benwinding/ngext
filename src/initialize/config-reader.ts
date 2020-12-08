@@ -4,6 +4,7 @@ import { NgextConfig } from "../types/ngext-config";
 
 const defaultConfig: NgextConfig = {
   env: {},
+  useFallback404: true
 };
 
 export async function ReadConfig(ROOT_DIR: string) {

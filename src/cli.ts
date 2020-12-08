@@ -8,6 +8,7 @@ import {
 } from "./transformers";
 import { InitNgextDir, MakeNewProject } from "./initialize/create-template";
 import { ReadConfig } from "./initialize/config-reader";
+import { NgextConfig } from "types/ngext-config";
 const packageJson = require(path.join(__dirname, "../package.json"));
 
 const execCmd = (cmd, directory) => {
@@ -47,12 +48,16 @@ commander
     await InitNgextDir(ROOT_DIR, conf);
     await copyAndTranslateAllPages(ROOT_DIR, conf);
     await execCmd(`${NG_PATH} build`, INTERMEDIATE_DIR);
-    await Copy404File(INTERMEDIATE_DIR);
+    await Copy404File(INTERMEDIATE_DIR, conf);
   });
 
 commander.version(packageJson.version, "-v, --version");
 
-async function Copy404File(INTERMEDIATE_DIR: string) {
+async function Copy404File(INTERMEDIATE_DIR: string, conf: NgextConfig) {
+  if (!conf.useFallback404) {
+    console.log("fallback 404 page disabled, not copying index.html");
+    return;
+  }
   const sourceHtmlFile = path.join(INTERMEDIATE_DIR, "dist", "index.html");
   const targetHtmlFile = path.join(INTERMEDIATE_DIR, "dist", "404.html");
   console.log("copying fallback file:");
