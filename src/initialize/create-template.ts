@@ -5,17 +5,17 @@ import fs from "fs-extra";
 import simpleGit from "simple-git";
 
 import { convertToRelativePath } from "../utils";
-import { NgextConfig } from "../types/ngext-config";
+import { NgextConfigResolved } from "../types/ngext-config";
 
-export async function InitNgextDir(ROOT_DIR: string, conf: NgextConfig) {
+export async function InitNgextDir(ROOT_DIR: string, conf: NgextConfigResolved) {
   const PROJECT_NAME = path.basename(ROOT_DIR);
   const globalModule = GetGlobalModule(ROOT_DIR);
   const vars = { 
     PROJECT_NAME: PROJECT_NAME, 
     "linkItem.path": "{{linkItem.path}}",
     PROJECT_ENV: JSON.stringify(conf.env),
-    PROJECT_SCRIPTS: JSON.stringify(conf.scripts || []),
-    PROJECT_STYLES: JSON.stringify(conf.styles || []),
+    PROJECT_SCRIPTS: JSON.stringify(conf.scriptsResolved || []),
+    PROJECT_STYLES: JSON.stringify(conf.stylesResolved || []),
     PROJECT_BASEHREF: JSON.stringify(conf.baseHref || '/'),
     GLOBAL_MODULE_IMPORT: globalModule.import,
     GLOBAL_MODULE_NAME: globalModule.name,

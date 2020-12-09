@@ -38,6 +38,7 @@
     "deep-object-diff": "^1.1.0",
     "fs-extra": "^9.0.1",
     "glob-watcher": "^5.0.5",
+    "globby": "^11.0.1",
     "shelljs": "^0.8.4",
     "simple-git": "^2.24.0",
     "ts-morph": "^9.1.0",
@@ -46,6 +47,7 @@
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
+    "@types/globby": "^9.1.0",
     "@types/jest": "^26.0.15",
     "jest": "^26.6.3",
     "ts-jest": "^26.4.4"
