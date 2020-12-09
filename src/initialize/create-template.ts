@@ -16,7 +16,8 @@ export async function InitNgextDir(ROOT_DIR: string, conf: NgextConfigResolved) 
     PROJECT_ENV: JSON.stringify(conf.env),
     PROJECT_SCRIPTS: JSON.stringify(conf.scriptsResolved || []),
     PROJECT_STYLES: JSON.stringify(conf.stylesResolved || []),
-    PROJECT_BASEHREF: JSON.stringify(conf.baseHref || '/'),
+    PROJECT_BASEHREF: conf.baseHref || '/',
+    PROJECT_HEAD_APPEND: conf.headAppend || '',
     GLOBAL_MODULE_IMPORT: globalModule.import,
     GLOBAL_MODULE_NAME: globalModule.name,
   };

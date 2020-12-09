@@ -1,5 +1,6 @@
 export interface NgextConfig {
   env?: {[key: string] : any};
+  headAppend?: string;
   scripts?: string[];
   baseHref?: string;
   useFallback404?: boolean;

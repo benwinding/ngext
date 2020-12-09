@@ -3,8 +3,9 @@
     <script>
       window.ENV = {{PROJECT_ENV}};
     </script>
-    <base href={{PROJECT_BASEHREF}} />
+    <base href="{{PROJECT_BASEHREF}}" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    {{PROJECT_HEAD_APPEND}}
   </head>
   <body>
     <app-root></app-root>
