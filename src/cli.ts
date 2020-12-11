@@ -67,8 +67,12 @@ async function Copy404File(INTERMEDIATE_DIR: string, conf: NgextConfig) {
   return fs.copyFile(sourceHtmlFile, targetHtmlFile);
 }
 
-async function CopyBuild(INTERMEDIATE_DIR: string, ROOT_DIR: string, conf: NgextConfig) {
-  const outputDir = conf.dist ? conf.dist : 'dist';
+async function CopyBuild(
+  INTERMEDIATE_DIR: string,
+  ROOT_DIR: string,
+  conf: NgextConfig
+) {
+  const outputDir = conf.dist ? conf.dist : "dist";
   if (!conf.dist) {
     console.log('"dist" not specified in ngext.config, using: ' + outputDir);
   }
@@ -77,7 +81,7 @@ async function CopyBuild(INTERMEDIATE_DIR: string, ROOT_DIR: string, conf: Ngext
 
   if (fs.pathExistsSync(targetBuild)) {
     try {
-      fs.rmdirSync(targetBuild);      
+      fs.rmSync(targetBuild, { recursive: true, force: true });
     } catch (error) {
       console.error(`--> Error deleting dist target: "${targetBuild}"`, error);
     }
@@ -86,7 +90,10 @@ async function CopyBuild(INTERMEDIATE_DIR: string, ROOT_DIR: string, conf: Ngext
   console.log("--> copying dist files:");
   console.log("  src=", sourceBuild);
   console.log(" dest=", targetBuild);
-  return fs.copy(sourceBuild, targetBuild, {overwrite: true, recursive: true});
+  return fs.copy(sourceBuild, targetBuild, {
+    overwrite: true,
+    recursive: true,
+  });
 }
 
 commander
