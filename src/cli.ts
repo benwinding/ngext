@@ -92,12 +92,10 @@ async function CopyBuild(
   const sourceBuild = path.join(INTERMEDIATE_DIR, "dist");
   const targetBuild = path.join(ROOT_DIR, outputDir);
 
-  if (fs.pathExistsSync(targetBuild)) {
-    try {
-      fs.rmSync(targetBuild, { recursive: true, force: true });
-    } catch (error) {
-      console.error(`--> Error deleting dist target: "${targetBuild}"`, error);
-    }
+  try {
+    fs.removeSync(targetBuild)
+  } catch (error) {
+    console.error(`--> Error deleting dist target: "${targetBuild}"`, error);
   }
 
   console.log("--> copying dist files:");
