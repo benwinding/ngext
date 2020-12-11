@@ -52,6 +52,19 @@ commander
     await CopyBuild(INTERMEDIATE_DIR, ROOT_DIR, conf);
   });
 
+commander
+  .command("export")
+  .description("Exports the ngext app with SSR")
+  .action(async () => {
+    CheckAngularCli();
+    const conf = await ReadConfig(ROOT_DIR);
+    await InitNgextDir(ROOT_DIR, conf);
+    await copyAndTranslateAllPages(ROOT_DIR, conf);
+    await execCmd(`${NG_PATH} run ngext:prerender`, INTERMEDIATE_DIR);
+    await Copy404File(INTERMEDIATE_DIR, conf);
+    await CopyBuild(INTERMEDIATE_DIR, ROOT_DIR, conf);
+  });
+
 commander.version(packageJson.version, "-v, --version");
 
 async function Copy404File(INTERMEDIATE_DIR: string, conf: NgextConfig) {

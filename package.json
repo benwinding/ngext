@@ -21,21 +21,22 @@
     "@angular/animations": "^10",
     "@angular/cli": "^10",
     "@angular/common": "10",
-    "@angular/compiler": "10",
     "@angular/compiler-cli": "10",
+    "@angular/compiler": "10",
     "@angular/core": "^10",
-    "@angular/platform-browser": "10",
     "@angular/platform-browser-dynamic": "^10",
+    "@angular/platform-browser": "10",
+    "@angular/platform-server": "10",
     "@angular/router": "10",
     "@babel/polyfill": "^7.10.4",
     "@ngtools/webpack": "^10",
-    "@types/fs-extra": "^9.0.4",
-    "@types/glob-watcher": "^5.0.0",
-    "@types/typescript": "^2.0.0",
+    "@nguniversal/builders": "10",
+    "@nguniversal/express-engine": "10",
     "circular-json": "^0.5.9",
     "commander": "^5.1.0",
     "copy-template-dir": "^1.4.0",
     "deep-object-diff": "^1.1.0",
+    "express": "^4.15.2",
     "fs-extra": "^9.0.1",
     "glob-watcher": "^5.0.5",
     "globby": "^11.0.1",
@@ -47,15 +48,18 @@
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
+    "@types/express": "^4.17.0",
+    "@types/fs-extra": "^9.0.4",
+    "@types/glob-watcher": "^5.0.0",
     "@types/globby": "^9.1.0",
     "@types/jest": "^26.0.15",
+    "@types/typescript": "^2.0.0",
     "jest": "^26.6.3",
     "ts-jest": "^26.4.4"
   },
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
     "watch": "tsc --project ./src/tsconfig.json --watch",
-    "test": "jest",
-    "watch-global": "yarn watch --outDir /home/ben/.config/yarn/global/node_modules/ngext/dist/"
+    "test": "jest"
   }
 }

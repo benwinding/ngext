@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
+    "outDir": "./out-tsc/app",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -12,6 +12,7 @@
     "importHelpers": true,
     "target": "es2015",
     "lib": ["es2017", "dom"],
+    "types": ["node"],
     "typeRoots": ["node_modules/@types", "~/.ngext/types/*", "~/types/*"],
     "paths": {
       "~": ["../"],
