@@ -7,9 +7,11 @@ import {
 } from "ts-morph";
 import { stripQuotes } from "../utils";
 import { NgextPage } from "../types/ngext-page";
+import { NgextConfigResolved } from "types/ngext-config";
 
 export function ProcessComponentSourceFile(
-  inputFile: SourceFile
+  inputFile: SourceFile,
+  config: NgextConfigResolved
 ): NgextPage | undefined {
   const foundImport = FindPageComponentImport(inputFile);
   if (!foundImport) {
@@ -41,12 +43,17 @@ export function ProcessComponentSourceFile(
     routerProps += `, redirectTo: ${redirectVal}`;
   }
 
+  const globalMod = config?.globalModule;
+  const hasGlobalMod = globalMod?.name;
+  const importsGlobal = hasGlobalMod ? `[${globalMod.name}]` : "[]";
+
   inputFile.addVariableStatement({
     declarations: [
       {
         name: "imports",
         initializer: `[
   CommonModule,
+  ...${importsGlobal},
   ...${importsVal || "[]"},
   RouterModule.forChild([{ ${routerProps} }])
 ];`,
@@ -102,10 +109,15 @@ export function ProcessComponentSourceFile(
     sourceFile: inputFile,
   };
   if (layoutImport) {
+    const layoutPath = layoutImport.getModuleSpecifier().getText();
     page.layout = {
       componentName: layoutVal,
-      importPath: stripQuotes(layoutImport.getModuleSpecifier().getText()),
+      importPath: stripQuotes(layoutPath),
     };
+  }
+  if (hasGlobalMod) {
+    const globalImportStatement = globalMod.import + ';\n';
+    inputFile.insertText(0, globalImportStatement);
   }
   console.log("--- > Processed: ", layoutVal);
   return page;
@@ -117,8 +129,8 @@ export function IsCommonModuleImported(inputFile: SourceFile): boolean {
     return false;
   }
   const isCommonModuleImported = angularCommonImport
-  .getNamedImports()
-  .some((i) => i.getName() === "CommonModule");
+    .getNamedImports()
+    .some((i) => i.getName() === "CommonModule");
   return isCommonModuleImported;
 }
 

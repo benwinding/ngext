@@ -7,7 +7,7 @@ import watch from "glob-watcher";
 import { ProcessComponentSourceFile } from "./transformers";
 import { CreateRoutesFile, MakeRouteObjs } from "./createRoutesFile";
 import { convertToRelativePath } from "../utils";
-import { NgextConfig } from "../types/ngext-config";
+import { NgextConfig, NgextConfigResolved } from "../types/ngext-config";
 
 export async function watchCopyAndTranslateAllPages(
   ROOT_DIR: string,
@@ -31,7 +31,7 @@ export async function copyAndTranslateAllPages(
   const project = new Project();
   const files = project.addSourceFilesAtPaths(pagesDirGlob);
   try {
-    const filesConverted = files.map(translateMatch);
+    const filesConverted = files.map(f  => translateMatch(f, ngextConf));
     await Promise.all(
       filesConverted.map((f) => saveFile(ROOT_DIR, f.sourceFile))
     );
@@ -80,8 +80,8 @@ async function saveIfUpdated(filePathNew: string, newText: string) {
   }
 }
 
-function translateMatch(sourceFile: SourceFile): NgextPage {
-  const sourceFileConverted = ProcessComponentSourceFile(sourceFile);
+function translateMatch(sourceFile: SourceFile, conf: NgextConfigResolved): NgextPage {
+  const sourceFileConverted = ProcessComponentSourceFile(sourceFile, conf);
   return sourceFileConverted;
 }
 

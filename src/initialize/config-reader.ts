@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
-import { NgextConfig, NgextConfigResolved } from "../types/ngext-config";
+import { GlobalModule, NgextConfig, NgextConfigResolved } from "../types/ngext-config";
 import globby from 'globby';
 
 const defaultConfig: NgextConfig = {
@@ -33,5 +33,23 @@ async function ResolveConfig(ROOT_DIR: string, conf: NgextConfig): Promise<Ngext
   const stylesGlob = path.join(ROOT_DIR, 'styles', '**.scss');
   confResolved.stylesResolved = await globby(stylesGlob);
   console.log("--> resolved styles: ", confResolved.stylesResolved);
+  confResolved.globalModule = GetGlobalModule(ROOT_DIR);
   return confResolved;
+}
+
+function GetGlobalModule(ROOT_DIR: string): GlobalModule {
+  const globalModule = path.join(ROOT_DIR, "global", "global.module.ts");
+  console.log('-> Checking for GlobalModule at: ' + globalModule);
+  if (!fs.pathExistsSync(globalModule)) {
+    console.log('-> global module not found');
+    return {
+      'import': '',
+      name: '',
+    }
+  }
+  console.log('-> global module found, using default export from file: ' + globalModule);
+  return {
+    import: 'import GlobalModule from "~/global/global.module.ts"',
+    name: 'GlobalModule',
+  }
 }

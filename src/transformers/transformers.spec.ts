@@ -82,7 +82,7 @@ describe("ProcessComponentSourceFile tests", () => {
     import { MyLayout } from "some/import/path"; 
     @Component({template: "test", layout: MyLayout}) 
     class A { thisIsATest = 99;}`);
-    const found = t.ProcessComponentSourceFile(testFile);
+    const found = t.ProcessComponentSourceFile(testFile, {});
     expect(found).toBeTruthy();
   });
 });
