@@ -7,7 +7,7 @@ import {
 } from "ts-morph";
 import { stripQuotes } from "../utils";
 import { NgextPage } from "../types/ngext-page";
-import { NgextConfigResolved } from "types/ngext-config";
+import { NgextConfigResolved } from "../types/ngext-config";
 
 export function ProcessComponentSourceFile(
   inputFile: SourceFile,
