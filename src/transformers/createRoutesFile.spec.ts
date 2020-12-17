@@ -81,3 +81,21 @@ describe("NormaliseRoutePath test", () => {
     expect(R.NormaliseRoutePath('./index')).toBe("");
   });
 });
+describe("Check dynamic routes test", () => {
+  test("Check with null", () => {
+    const segments = R.ConvertRouteToDynamicSegments(null);
+    expect(segments).toBeFalsy();
+  });
+  test("Check with no matches", () => {
+    const segments = R.ConvertRouteToDynamicSegments('sascasc/asc');
+    expect(segments).toBe('sascasc/asc');
+  });
+  test("Check route path matches", () => {
+    const segments = R.ConvertRouteToDynamicSegments('./some/[other]/thing');
+    expect(segments).toEqual('./some/:other/thing');
+  });
+  test("Check multiple matches", () => {
+    const segments = R.ConvertRouteToDynamicSegments('./some/[other]/thing/[again]');
+    expect(segments).toEqual('./some/:other/thing/:again');
+  });
+});

@@ -7,48 +7,52 @@ import watch from "glob-watcher";
 import { ProcessComponentSourceFile } from "./transformers";
 import { CreateRoutesFile, MakeRouteObjs } from "./createRoutesFile";
 import { convertToRelativePath } from "../utils";
-import { NgextConfig, NgextConfigResolved } from "../types/ngext-config";
+import { NgextConfigResolved } from "../types/ngext-config";
 
 export async function watchCopyAndTranslateAllPages(
   ROOT_DIR: string,
-  ngextConf: NgextConfig
+  config: NgextConfigResolved
 ) {
   const pagesDirGlob = path.join(ROOT_DIR, "pages/**/*.ts");
   console.log("- watching pages: ", pagesDirGlob);
   const watcher = watch([pagesDirGlob]);
   watcher.on("change", (e, filename) => {
     console.log("-> file page changed: ", filename);
-    copyAndTranslateAllPages(ROOT_DIR, ngextConf);
+    copyAndTranslateAllPages(ROOT_DIR, config);
   });
 }
 
 export async function copyAndTranslateAllPages(
   ROOT_DIR: string,
-  ngextConf: NgextConfig
+  config: NgextConfigResolved
 ) {
   const pagesDirGlob = path.join(ROOT_DIR, "pages/**/*.ts");
   console.log("- building pages: ", pagesDirGlob);
   const project = new Project();
   const files = project.addSourceFilesAtPaths(pagesDirGlob);
   try {
-    const filesConverted = files.map(f  => translateMatch(f, ngextConf));
+    const filesConverted = files.map((f) => translateMatch(f, config));
     await Promise.all(
       filesConverted.map((f) => saveFile(ROOT_DIR, f.sourceFile))
     );
-    await saveRoutesFile(ROOT_DIR, filesConverted);
+    await saveRoutesFile(ROOT_DIR, filesConverted, config);
   } catch (error) {
     console.error(error);
   }
 }
 
-async function saveRoutesFile(ROOT_DIR: string, routeModuleFiles: NgextPage[]) {
+async function saveRoutesFile(
+  ROOT_DIR: string,
+  routeModuleFiles: NgextPage[],
+  config: NgextConfigResolved
+) {
   const routeFilePath = path.join(ROOT_DIR, ".ngext", "src", "routes.ts");
   const project = new Project();
   const tsRouteFile = project.createSourceFile(routeFilePath, "", {
     overwrite: true,
   });
   const routeObjs = MakeRouteObjs(ROOT_DIR, routeModuleFiles);
-  const ftrans = CreateRoutesFile(tsRouteFile, routeObjs);
+  const ftrans = CreateRoutesFile(tsRouteFile, routeObjs, config);
   console.log("- saving routes file: ", routeFilePath);
   ftrans.formatText();
   ftrans.save();
@@ -80,7 +84,10 @@ async function saveIfUpdated(filePathNew: string, newText: string) {
   }
 }
 
-function translateMatch(sourceFile: SourceFile, conf: NgextConfigResolved): NgextPage {
+function translateMatch(
+  sourceFile: SourceFile,
+  conf: NgextConfigResolved
+): NgextPage {
   const sourceFileConverted = ProcessComponentSourceFile(sourceFile, conf);
   return sourceFileConverted;
 }

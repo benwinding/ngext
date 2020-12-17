@@ -3,14 +3,17 @@ export interface NgextConfig {
   headAppend?: string;
   scripts?: string[];
   baseHref?: string;
-  useFallback404?: boolean;
+  routeFailPreventRedirect?: boolean;
+  routeFailRedirectTo?: string;
   dist?: string;
+  useFallback404?: boolean;
 }
 
 export interface NgextConfigResolved extends NgextConfig {
   scriptsResolved?: string[];
   stylesResolved?: string[];
   globalModule?: GlobalModule;
+  custom404ComponentName?: string;
 }
 
 export type GlobalModule = { import: string; name: string };

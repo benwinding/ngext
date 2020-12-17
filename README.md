@@ -23,6 +23,7 @@ A routing framework for angular inspired by React's <a href="https://github.com/
 - Lazy loaded modules generation
 - Dynamic configurations (no more static angular.json files)
 - Declarative route layouts
+- Server-side rendering, (HTML file for each page!)
 
 ## Get Started
 
@@ -41,6 +42,7 @@ Options:
 Commands:
   new [ProjectName]  Creates a new project
   build              Builds the ngext app
+  export             Exports the ngext app with SSR
   dev                Runs the ngext app locally
   help [command]     display help for command
 ```

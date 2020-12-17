@@ -2,6 +2,7 @@ import { SourceFile } from "ts-morph";
 import * as path from "path";
 import { convertToRelativePath, stripTsExtension } from "../utils";
 import { NgextPage } from "../types/ngext-page";
+import { NgextConfigResolved } from "../types/ngext-config";
 
 /* 
 import { Routes } from "@angular/router";
@@ -24,16 +25,14 @@ export const routes: Routes = [
 
 export function CreateRoutesFile(
   tsfile: SourceFile,
-  routeObjs: RouteObj[]
+  routeObjs: RouteObj[],
+  config: NgextConfigResolved
 ): SourceFile {
   // initialize
   addAngularImportDeclarations(tsfile);
   addLayoutImportDeclarations(tsfile, routeObjs);
-  const firstRoutePath = routeObjs[0].routePath;
-  const routesLiteral = [
-    ...routeObjs.map(createPageRouteItem),
-    createRouteCatchAllObj(firstRoutePath),
-  ];
+  const routesLiteral = routeObjs.map(createPageRouteItem);
+  routesLiteral.push(create404Component(config));
   const routeArrayLiteral = `[
   ${routesLiteral.join(",")}
 ]`;
@@ -71,12 +70,19 @@ export function MakeRouteObj(
   );
   const pageFilePath = convertToRelativePath(ROOT_DIR, modulePathNoTs);
   const pageRoute = convertToRelativePath(pagesDir, modulePathNoTs);
+  const pageRouteDynamic = ConvertRouteToDynamicSegments(pageRoute);
+  const pageRouteFinal = NormaliseRoutePath(pageRouteDynamic);
   const routeObj: RouteObj = {
-    routePath: NormaliseRoutePath(pageRoute),
+    routePath: pageRouteFinal,
+    isDynamicRoute: IsDynamic(pageRouteDynamic),
     filePath: pageFilePath,
     layout: GetLayout(pageComponent),
   };
   return routeObj;
+}
+
+export function IsDynamic(pageRouteDynamic: string) {
+  return pageRouteDynamic.includes(':');
 }
 
 export function NormaliseRoutePath(pageRoute: string): string {
@@ -90,6 +96,14 @@ export function NormaliseRoutePath(pageRoute: string): string {
     ? removeIndex1.slice(0, -5)
     : removeIndex1;
   return removeIndex2;
+}
+
+export function ConvertRouteToDynamicSegments(pageRoute: string): string {
+  if (!pageRoute) {
+    return undefined;
+  }
+  const result = pageRoute.replace(/\[([\w]*)\]/g, (value, arg1) => ":" + arg1);
+  return result;
 }
 
 export function GetLayout(pageComponent: NgextPage): RouteLayout {
@@ -111,6 +125,10 @@ export function addAngularImportDeclarations(tsFile: SourceFile): void {
     {
       moduleSpecifier: "./default.layout",
       namedImports: ["NgextDefaultLayout"],
+    },
+    {
+      moduleSpecifier: "./default.404.page",
+      namedImports: ["NgextDefault404Page"],
     },
   ]);
 }
@@ -147,7 +165,7 @@ export function createPageRouteItem(route: RouteObj): string {
   {
     path: "${route.routePath}",
     component: ${layoutName},
-    pathMatch: "full",
+    ${route.isDynamicRoute ? '' : 'pathMatch: "full",'}
     loadChildren: () => import("${route.filePath}").then((m) => m.default),
   }`;
 }
@@ -160,7 +178,16 @@ export function createRouteCatchAllObj(redirectTo: string): string {
   }`;
 }
 
+export function create404Component(config: NgextConfigResolved): string {
+  return `
+  {
+    path: "**",
+    component: NgextDefault404Page,
+  }`;
+}
+
 export type RouteObj = {
+  isDynamicRoute?: boolean;
   routePath: string;
   filePath: string;
   layout?: RouteLayout;
