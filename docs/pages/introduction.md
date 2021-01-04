@@ -15,6 +15,6 @@ Angular has many elegant abstractions, `@Component`, `@Module`, `@Injectable`. H
 
 In order to add a new page, Angular routing requires that you edit 3 places; add a component file, declare component in a module, and add a route to a routing module.
 
-![comparison](/docs/imgs/ngext-comparison.png)
+![comparison](/imgs/ngext-comparison.png)
 
 This project attempts to encapsulate this into a single abstraction `@PageComponent`, which contains the component, dependencies and the route path which is generated from the page location. Making it easier than ever to add new pages to Angular apps.
