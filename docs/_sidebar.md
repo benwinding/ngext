@@ -1,0 +1,6 @@
+- [**Introduction**](pages/introduction.md)
+- [**Get Started**](pages/get-started.md)
+- [**CLI**](pages/cli.md)
+- [**Directory Structure**](pages/directory-structure.md)
+- [**FAQ**](pages/faq.md)
+- [**Credits**](pages/credits.md)

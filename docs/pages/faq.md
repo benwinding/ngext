@@ -1,33 +1,3 @@
-# ngext
-
-A routing framework for angular inspired by React's [next.js](https://github.com/vercel/next.js).
-
-## Features
-
-- File-based routing (no more routing modules!)
-- Lazy loaded modules generation
-
-## Get Started
-
-**Install**
-``` sh
-npm i -g ngext
-```
-**Usage**
-```
-Usage: ngext [options] [command]
-
-Options:
-  -v, --version      output the version number
-  -h, --help         display help for command
-
-Commands:
-  new [ProjectName]  Creates a new project
-  build              Builds the ngext app
-  dev                Runs the ngext app locally
-  help [command]     display help for command
-```
-
 # FAQ
 
 ## Why did you make this?
@@ -91,7 +61,3 @@ But this was deemed impossible with the current compiler as it doesn't obey the 
 This project uses a 2 stage build system. Stage 1 translates the `ngext` Components into standard Angular `@NgModule`'s and `@Components`. Stage 2 generates the application, like a normal angular application.
 
 This was actually easier and had greater flexibility and speed in development. It also meant I got to make a cool CLI tool like nextjs!
-
-# Thanks
-
-Special thanks to [next.js](https://nextjs.org/) and [nuxt.js](https://nuxtjs.org/), which were both big influences on this project.

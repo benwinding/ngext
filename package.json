@@ -54,12 +54,14 @@
     "@types/globby": "^9.1.0",
     "@types/jest": "^26.0.15",
     "@types/typescript": "^2.0.0",
+    "docsify-cli": "^4.4.2",
     "jest": "^26.6.3",
     "ts-jest": "^26.4.4"
   },
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
     "watch": "tsc --project ./src/tsconfig.json --watch",
-    "test": "jest"
+    "test": "jest",
+    "docs": "yarn docsify serve docs"
   }
 }
