@@ -12,7 +12,7 @@ PAGE FILE                    ROUTE PATH
 ~/pages/page.ts          ->  /page
 ~/pages/folder/index.ts  ->  /folder
 ~/pages/folder/page.ts   ->  /folder/page
-~/pages/users/:id.ts     ->  /users/:id
+~/pages/users/_id.ts     ->  /users/:id
 ```
 
 Compiled routes are found in `~/.ngext/src/routes.ts`

@@ -91,11 +91,11 @@ describe("Check dynamic routes test", () => {
     expect(segments).toBe('sascasc/asc');
   });
   test("Check route path matches", () => {
-    const segments = R.ConvertRouteToDynamicSegments('./some/[other]/thing');
+    const segments = R.ConvertRouteToDynamicSegments('./some/_other/thing');
     expect(segments).toEqual('./some/:other/thing');
   });
   test("Check multiple matches", () => {
-    const segments = R.ConvertRouteToDynamicSegments('./some/[other]/thing/[again]');
+    const segments = R.ConvertRouteToDynamicSegments('./some/_other/thing/_again');
     expect(segments).toEqual('./some/:other/thing/:again');
   });
 });

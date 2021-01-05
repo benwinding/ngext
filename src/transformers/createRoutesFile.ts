@@ -102,7 +102,7 @@ export function ConvertRouteToDynamicSegments(pageRoute: string): string {
   if (!pageRoute) {
     return undefined;
   }
-  const result = pageRoute.replace(/\[([\w]*)\]/g, (value, arg1) => ":" + arg1);
+  const result = pageRoute.replace(/\_([\w]*)/g, (value, arg1) => ":" + arg1);
   return result;
 }
 
