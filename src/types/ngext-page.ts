@@ -7,19 +7,3 @@ export interface NgextPage {
     importPath: string;
   }
 }
-
-export interface NgextRoot {
-  root?: string;
-  sourcePath?: string;
-  routePath?: string;
-  importPath?: string;
-  template?: {
-    text: string
-  }
-  beforePage?: {
-    text: string
-  }
-  afterPage?: {
-    text: string
-  }
-}
