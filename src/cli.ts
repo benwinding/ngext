@@ -110,13 +110,15 @@ async function CopyBuild(
 commander
   .command("dev")
   .description("Runs the ngext app locally")
-  .action(async () => {
+  .option("-p, --port <PORT>", "Port for the dev server (default is 4200)")
+  .action(async (options) => {
     CheckAngularCli();
     const conf = await ReadConfig(ROOT_DIR);
     await InitNgextDir(ROOT_DIR, conf);
     await copyAndTranslateAllPages(ROOT_DIR, conf);
     watchCopyAndTranslateAllPages(ROOT_DIR, conf);
-    execCmd(`${NG_PATH} serve`, INTERMEDIATE_DIR);
+    const OPTIONS = options.port ? `--port ${options.port}` : '';
+    execCmd(`${NG_PATH} serve ${OPTIONS}`, INTERMEDIATE_DIR);
   });
 
 function CheckAngularCli() {

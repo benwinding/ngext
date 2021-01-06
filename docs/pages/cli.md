@@ -17,6 +17,11 @@ Builds the **ngext** app, then applys SSR (Server-Side Rendering) and outputs th
 
 Serves the **ngext** app, watches for changes.
 
+```
+Options:
+  -p, --port <PORT>  Port for the dev server (default is 4200)
+```
+
 ## `ngext help`
 
 Shows commands with help.
