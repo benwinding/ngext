@@ -1,7 +1,7 @@
 import commander from "commander";
 import path from "path";
 import fs from "fs-extra";
-import { exec } from "child_process";
+import { spawn } from "child_process";
 import {
   copyAndTranslateAllPages,
   watchCopyAndTranslateAllPages,
@@ -13,13 +13,13 @@ const packageJson = require(path.join(__dirname, "../package.json"));
 
 const execCmd = (cmd, directory) => {
   console.log(`running $ "${cmd}" in dir: [${directory}]`);
-  const child = exec(cmd, { cwd: directory });
+  const child = spawn(cmd, { cwd: directory, shell: true, stdio: "inherit" });
 
   child.stdout.on("data", function (data) {
-    console.log(data);
+    process.stdout.write(data);
   });
   child.stderr.on("data", function (data) {
-    console.error(data);
+    process.stderr.write(data);
   });
   return new Promise((resolve, reject) => {
     child.on("close", resolve);
@@ -93,7 +93,7 @@ async function CopyBuild(
   const targetBuild = path.join(ROOT_DIR, outputDir);
 
   try {
-    fs.removeSync(targetBuild)
+    fs.removeSync(targetBuild);
   } catch (error) {
     console.error(`--> Error deleting dist target: "${targetBuild}"`, error);
   }
@@ -117,7 +117,7 @@ commander
     await InitNgextDir(ROOT_DIR, conf);
     await copyAndTranslateAllPages(ROOT_DIR, conf);
     watchCopyAndTranslateAllPages(ROOT_DIR, conf);
-    const OPTIONS = options.port ? `--port ${options.port}` : '';
+    const OPTIONS = options.port ? `--port ${options.port}` : "";
     execCmd(`${NG_PATH} serve ${OPTIONS}`, INTERMEDIATE_DIR);
   });
 

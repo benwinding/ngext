@@ -7,7 +7,6 @@ name: 🚀 Build and Publish
 jobs:
   build:
     name: Deploy Library
-    if: "contains(github.event.head_commit.message, 'ci-deploy')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
