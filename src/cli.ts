@@ -10,17 +10,23 @@ import { InitNgextDir, MakeNewProject } from "./initialize/create-template";
 import { ReadConfig } from "./initialize/config-reader";
 import { NgextConfig } from "types/ngext-config";
 const packageJson = require(path.join(__dirname, "../package.json"));
+import stream from 'stream';
 
 const execCmd = (cmd, directory) => {
   console.log(`[running command] $ "${cmd}" in dir: [${directory}]`);
-  const child = spawn(cmd, { cwd: directory, shell: true, stdio: "pipe" });
 
-  child.stdout?.on("data", function (data) {
+  const stdout = new stream.Writable();
+  stdout._write = function (data) {
     process.stdout.write(data);
-  });
-  child.stderr?.on("data", function (data) {
+  };
+  const stderr = new stream.Writable();
+  stderr._write = function (data) {
     process.stderr.write(data);
-  });
+  };
+  const child = spawn(cmd, { cwd: directory, shell: true, stdio: 'inherit' });
+  child.stdout.pipe(stdout);
+  child.stderr.pipe(stderr);
+
   return new Promise((resolve, reject) => {
     child.on("close", resolve);
   });
