@@ -24,8 +24,8 @@ const execCmd = (cmd, directory) => {
     process.stderr.write(data);
   };
   const child = spawn(cmd, { cwd: directory, shell: true, stdio: 'inherit' });
-  child.stdout.pipe(stdout);
-  child.stderr.pipe(stderr);
+  child.stdout?.pipe(stdout);
+  child.stderr?.pipe(stderr);
 
   return new Promise((resolve, reject) => {
     child.on("close", resolve);
