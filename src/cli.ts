@@ -12,13 +12,13 @@ import { NgextConfig } from "types/ngext-config";
 const packageJson = require(path.join(__dirname, "../package.json"));
 
 const execCmd = (cmd, directory) => {
-  console.log(`running $ "${cmd}" in dir: [${directory}]`);
-  const child = spawn(cmd, { cwd: directory, shell: true, stdio: "inherit" });
+  console.log(`[running command] $ "${cmd}" in dir: [${directory}]`);
+  const child = spawn(cmd, { cwd: directory, shell: true, stdio: "pipe" });
 
-  child.stdout.on("data", function (data) {
+  child.stdout?.on("data", function (data) {
     process.stdout.write(data);
   });
-  child.stderr.on("data", function (data) {
+  child.stderr?.on("data", function (data) {
     process.stderr.write(data);
   });
   return new Promise((resolve, reject) => {
