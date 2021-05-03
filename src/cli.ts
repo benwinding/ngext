@@ -53,7 +53,7 @@ commander
     const conf = await ReadConfig(ROOT_DIR);
     await InitNgextDir(ROOT_DIR, conf);
     await copyAndTranslateAllPages(ROOT_DIR, conf);
-    await execCmd(`${NG_PATH} build`, INTERMEDIATE_DIR);
+    await execCmd(`"${NG_PATH}" build`, INTERMEDIATE_DIR);
     await Copy404File(INTERMEDIATE_DIR, conf);
     await CopyBuild(INTERMEDIATE_DIR, ROOT_DIR, conf);
   });
@@ -66,7 +66,7 @@ commander
     const conf = await ReadConfig(ROOT_DIR);
     await InitNgextDir(ROOT_DIR, conf);
     await copyAndTranslateAllPages(ROOT_DIR, conf);
-    await execCmd(`${NG_PATH} run ngext:prerender`, INTERMEDIATE_DIR);
+    await execCmd(`"${NG_PATH}" run ngext:prerender`, INTERMEDIATE_DIR);
     await Copy404File(INTERMEDIATE_DIR, conf);
     await CopyBuild(INTERMEDIATE_DIR, ROOT_DIR, conf);
   });
@@ -124,7 +124,7 @@ commander
     await copyAndTranslateAllPages(ROOT_DIR, conf);
     watchCopyAndTranslateAllPages(ROOT_DIR, conf);
     const OPTIONS = options.port ? `--port ${options.port}` : "";
-    execCmd(`${NG_PATH} serve ${OPTIONS}`, INTERMEDIATE_DIR);
+    execCmd(`"${NG_PATH}" serve ${OPTIONS}`, INTERMEDIATE_DIR);
   });
 
 function CheckAngularCli() {
