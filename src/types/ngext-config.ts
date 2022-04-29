@@ -2,6 +2,7 @@ export interface NgextConfig {
   env?: { [key: string]: any };
   headAppend?: string;
   scripts?: string[];
+  assets?: ({ [key: string]: any } | string)[];
   baseHref?: string;
   routeFailPreventRedirect?: boolean;
   routeFailRedirectTo?: string;

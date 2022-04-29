@@ -22,13 +22,7 @@
             "aot": true,
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "../static",
-                "output": "/"
-              }
-            ],
+            "assets": {{PROJECT_ASSETS}},
             "scripts": {{PROJECT_SCRIPTS}},
             "styles": {{PROJECT_STYLES}}
           },
