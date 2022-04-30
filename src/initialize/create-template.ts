@@ -19,6 +19,14 @@ export async function InitNgextDir(
     PROJECT_ENV: JSON.stringify(conf.env),
     PROJECT_SCRIPTS: JSON.stringify(conf.scriptsResolved || []),
     PROJECT_STYLES: JSON.stringify(conf.stylesResolved || []),
+    PROJECT_ASSETS: JSON.stringify([
+      {
+        "glob": "**/*",
+        "input": "../static",
+        "output": "/"
+      },
+      ...(conf.assets || [])
+    ]),
     PROJECT_BASEHREF: conf.baseHref || "/",
     PROJECT_HEAD_APPEND: conf.headAppend || "",
     GLOBAL_MODULE_IMPORT: globalModule.import,
